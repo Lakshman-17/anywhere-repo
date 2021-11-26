@@ -1,0 +1,857 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="CodeMirror/lib/codemirror.css">
+		<link rel="stylesheet" type="text/css" href="CodeMirror/fold/foldgutter.css">
+		<link rel="stylesheet" type="text/css" href = "CodeMirror/theme/material-darker.css">
+		<link rel="stylesheet" type="text/css" href="CodeMirror/hint/show-hint.css">
+		<link rel="stylesheet" type="text/css" href="CodeMirror/search/matchesonscrollbar.css">
+		<link rel="stylesheet" type="text/css" href="CodeMirror/dialog/dialog.css">
+		<link rel="stylesheet" type="text/css" href="CodeMirror/scroll/simplescrollbars.css">
+		<!-- <link rel="stylesheet" type="text/css" href="CodeMirror/lint/lint.css"> -->
+		<!-- 	<script type="text/javascript" src = "index.js"></script> -->
+		<script src="CodeMirror/lib/codemirror.js"></script>
+		<script src = "CodeMirror/fold/foldcode.js"></script>
+		<script src = "CodeMirror/fold/foldgutter.js"></script>
+		<script src = "CodeMirror/fold/brace-fold.js"></script>
+		<script src = "CodeMirror/mode/javascript.js"></script>
+		<script src = "CodeMirror/edit/matchbrackets.js"></script>
+		<script src = "CodeMirror/edit/closebrackets.js"></script>
+		<script src = "CodeMirror/keymap/sublime.js"></script>
+		<script src = "CodeMirror/keymap/vim.js"></script>
+		<script src = "CodeMirror/hint/show-hint.js"></script>
+		<!-- <script src = "CodeMirror/hint/anyword-hint.js"></script> -->
+		<script src = "CodeMirror/hint/javascript-hint.js"></script>
+		<script src = "CodeMirror/search/jump-to-line.js"></script>
+		<script src = "CodeMirror/search/searchcursor.js"></script>
+		<script src = "CodeMirror/search/search.js"></script>
+		<script src = "CodeMirror/dialog/dialog.js"></script>
+		<script src = "CodeMirror/scroll/simplescrollbars.js"></script>
+		<script src = "CodeMirror/lint/lint.js"></script>
+		<script src = "CodeMirror/lint/javascript-lint.js"></script>
+		<script src = "CodeMirror/lint/coffeescript-lint.js"></script>
+		<script src = "macro-classes.js"></script>
+		<script src = "test.js"></script>
+		
+	</head>
+	<style>
+		body{
+			background-color: gray;
+		}
+		button:hover{
+			transform: scale(1.1);
+		}
+		/*	.CodeMirror-hint-desc{
+		position: absolute;
+		top : 0;
+		left: 0;
+		width: 200px;
+		height: 200px;
+		border-radius: 1px solid black;
+		background-color: white;
+		color: blue;
+		z-index: 100;
+		}
+		*/
+	</style>
+	<body>
+		<textarea id="editorarea"> </textarea>
+		<script type="text/javascript">
+			// CodeMirror.commands.autocomplete = function(cm) {
+				// 	cm.showHint({hint: CodeMirror.hint.anyword});
+			// }
+			var editor = CodeMirror.fromTextArea(document.getElementById("editorarea"), {
+				lineNumbers : true,
+				tabSize : 4,
+				mode : {name: "javascript", globalVars: true},
+				theme : "material-darker",
+				matchBrackets : true,
+				autoCloseBrackets : true,
+				autofocus : true,
+				foldGutter : true,
+				autohint: true,
+				gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"] ,
+				extraKeys : {"Ctrl-Space" : "autocomplete",
+							"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
+							"Shift-Tab" : "indentLess"
+							},
+				scrollbarStyle : "overlay",
+				// gutters: ["CodeMirror-lint-markers"],
+				// lint: true
+			});
+			// var orig = CodeMirror.hint.anyword;
+			// CodeMirror.hint.anyword = function(cm) {
+			//   var inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+			//   inner.list.push("bozo");
+			//   inner.list.push("auto");
+			//   inner.list.push("var");
+			//   console.trace();
+			//   return inner;
+			// };
+		</script>
+		<button id="btntheme" onclick="changetheme()">Change theme</button>
+		<button id="btnlineno" onclick="togglelineno()">Line Numbers</button>
+		<label for="selecttabsize">Tab Size</label>
+		<select id="selecttabsize" onchange="changetabsize()">
+			<option value =2>2</option>
+			<option value =3>3</option>
+			<option value =4 selected>4</option>
+		</select>
+		<label for="selectFunction">Functions</label>
+		<select id="selectFunction" onchange="scrollToFunction()">
+			<option value = "null" selected>- no func yet -</option>
+		</select>
+		
+		<button id="btnundo" onclick="doundo()">Undo</button>
+		<button id="btnredo" onclick="doredo()">Redo</button>
+		<button id="btngoto" onclick="dogoto()">Goto</button>
+		
+		<button id="btnfind" onclick="doFind()">Find</button>
+		<button id="btnreplace" onclick="doReplace()">Replace</button>
+		<button id="btnPrettyPrint" onclick="doPrettyPrint()">Pretty Print</button>
+		<button id="btnSelectAll" onclick="doSelectAll()">Select All</button>
+		<button id="btnRefresh" onclick="doRefresh()">Refresh</button>
+		<button id="btnFontSize" onclick="changeFontSize(16)">Font to 16px</button>
+		<!-- <button id="btnCreateBox" onclick="createBox()">Create Hint Box</button> -->
+		<!--
+			<button id="btnContent" onclick="dispContent()">Disp Editor Content</button>
+			<button id="btnCharCount" onclick="dispCharCount()">Disp Char Count</button>
+			<button id="btnSetCursor" onclick="setCursorPos()">Set Cursor</button>
+			<button id="btnGetCursor" onclick="getCursorPos()">Get Cursor</button>
+			<button id="btnLineCount" onclick="dispLineCount()">Line Count</button>
+			<button id="btnCopy" onclick="doCopy()">Copy</button>
+			<button id="btnPaste" onclick="doPaste()">Paste</button>
+			<button id="btnFocus" onclick="doFocus()">HasFocus</button>
+		-->
+		<p id="disp">Total Line : <span id="total-line"></span>
+		Current Line : <span id="line-no."></span>
+		Char count : <span id="liveCharCount"></span></p><br>
+		<!-- <p id="dicttest"></p> -->
+		<!-- <p id="typecheck"></p> -->
+		<p>Cur Tok disp: <span id="tokDisp"> </span></p>
+		<p> var count : <span id="varcount"></span>
+		Function count : <span id="dispFuncCount"></span></p>
+		<p> var name list : <span id="varlist"></span></p>
+		<p> var details : <span id="vardetails"></span></p>
+		<p> Func details : <span id="dispFuncDetails"></span></p>
+		<p> Parameters : <span id="dispParam"></span></p>
+		<p> Parameters count : <span id="dispParamCount"></span></p>
+		<p> Cur Parameter : <span id="dispCurParam"></span></p>
+		<!--
+			<p id="dispCursor"></p>
+			<p id="charCount">Char count : </p>
+			<p id="dispContent"></p>
+			<p id="copycontent"></p>
+			<p id="dispFocus"></p>
+		-->
+		<script type="text/javascript">
+			
+			var var_count = 0;
+			var func_count = 0;
+			var var_details = [];
+			var var_name_list = [];
+			var func_list = [];
+			function changetheme(){
+				if(editor.getOption("theme") == "default"){
+					editor.setOption("theme","material-darker");
+				}
+				else{
+						editor.setOption("theme","default");
+				}
+			}
+			function togglelineno(){
+				if(editor.getOption("lineNumbers") == true){
+						editor.setOption("lineNumbers",false);
+					}
+					else{
+						editor.setOption("lineNumbers",true);
+					}
+			}
+			function changetabsize(){
+				let val = document.getElementById('selecttabsize').value;
+				editor.setOption("tabSize",val);
+			}
+		/*
+			function createBox(){
+				let dbox = document.createElement("P");
+				dbox.className = "CodeMirror-hint-desc";
+				document.body.appendChild(dbox);
+				}	*/
+			function doundo(){
+				editor.execCommand("undo");
+			}
+			function doredo(){
+				editor.execCommand("redo");
+			}
+			function dogoto(){
+					editor.execCommand("jumpToLine");
+			}
+			function doFind(){
+				editor.execCommand("find");
+			}
+			function doReplace(){
+				editor.execCommand("replace");
+			}
+			function doPrettyPrint(){
+					editor.execCommand("indentAuto");
+				//	autoFormatSelection();
+			}
+		function doSelectAll(){
+			editor.execCommand("selectAll");
+		}
+			function getCursorPos(){
+				let obj = editor.getCursor();
+					document.getElementById("dispCursor").innerHTML =	"obj values " + obj.line;
+			}
+		const STATUS_CURRENT_LINE = document.getElementById('line-no.');
+			const onCursorActivity = (instance) => {
+			const cursor = editor.getCursor();
+			STATUS_CURRENT_LINE.textContent = cursor.line + 1;
+			document.getElementById("total-line").textContent = editor.lineCount();
+			}
+			editor.on("cursorActivity", onCursorActivity);
+			const STATUS_VAR_COUNT = document.getElementById("varcount");
+			const STATUS_VAR_LIST = document.getElementById("varlist");
+			const STATUS_VAR_TYPE_DETAILS = document.getElementById("vardetails");
+			function getV(){
+				STATUS_VAR_COUNT.innerHTML = 0;
+				var_count = 0;
+				var_details = [];
+				var_name_list = [];
+				let totallines = editor.lineCount();
+				let curs = editor.getCursor();
+				let startToken;
+				let tokChangeLabel = 0;
+		console.clear();
+				for(let iter = 0; iter < totallines ; iter++){
+					let tokenlist = editor.getLineTokens(iter);
+					let tokcount = tokenlist.length;
+						let semicolon_found = -1;
+					let t;
+					let pending = 0;
+					if(tokChangeLabel == 0){
+						t = 0;
+					}
+					else{
+									t = startToken;			console.log("start token : " + startToken + " iter : " + iter);
+						tokChangeLabel = 0;
+						startToken = 0;
+					}
+					let skip = false;
+					if( pending == 0 ){
+						// for(let t = 0 ; t < tokcount && skip== false ; t++){
+						for(; t < tokcount && skip== false ; t++){
+							if(tokenlist[t].string == "var" || tokenlist[t].string == "let" || tokenlist[t].string == "const"){
+								++varcount;
+								let type_found = 0;
+								let equal_sign_found = 0;
+								let is_variable = 0;
+								let is_operator = 0;
+								pending = 1;
+								let tname = "";
+								if(tokcount >= 3){
+									if(typeof(tokenlist[t+2]) != "undefined"){
+										tname = tokenlist[t+2].string;
+									}
+															}
+								let ttype = "undefined";
+								let tvalue =  "";
+								while(t < tokcount && skip == false){
+									if(typeof(tokenlist[t]) == "undefined"){
+										continue;
+									}
+									if(tokenlist[t].string == ";"){
+										t++;
+										pending = 0;
+										break;
+									}
+									if(equal_sign_found == 1){
+										tvalue += tokenlist[t].string;
+									}
+									if(tokenlist[t].string == "="){
+										equal_sign_found = 1;
+										t++;
+										continue;
+									}
+									if(tokenlist[t].type == "number"){
+										ttype = tokenlist[t].type;
+										type_found = 1;
+									}
+									if(tokenlist[t].type == "string"){
+										ttype = tokenlist[t].type;
+										type_found = 1;
+									}
+									if(tokenlist[t].string == "["){
+										ttype = "array";
+										type_found = 1;
+									}
+		//console.log("t val : " + t + " str : " + tokenlist[t].string);
+									if(tokenlist[t].type == "variable"){
+										if(t+1 < tokcount){
+											if(tokenlist[t+1].string != "."){
+												let vdetails = isVariable(tokenlist[t].string);
+												if(vdetails.found == true){
+													ttype = vdetails.vtype;
+												}
+												else{
+													let cdetails = isClass(tokenlist[t].string);
+													if(cdetails.found == true){
+														ttype = cdetails.ctype;
+														}
+												}
+											}
+											else if (tokenlist[t+1].string == "."){
+												
+												// break here
+												let stop = false;
+												let curline = iter;
+												let linlist = new LinkedList();
+												let toklist = editor.getLineTokens(curline);
+												let tokcount = toklist.length;
+												let itr = t;
+												let notfound = true;
+												let start = 0;
+												let semicolonfound = 0;
+												while(stop != true && curline < totallines && notfound == true && semicolonfound == 0){
+																let toklist = editor.getLineTokens(curline);			console.log("curline : " + curline);
+														for( ; itr < tokcount ; itr++){
+														if(curline == iter){
+															if(toklist[itr].type == "variable" && start == 0){
+																linlist.insertAtEnd(toklist[itr].string);
+																start = 1;
+															}
+														}
+														if(start == 1){
+																	if(typeof(toklist[itr]) != "undefined") {		console.log(toklist[itr].string);
+																if(toklist[itr].type == "keyword" || toklist[itr].string == "="){
+																	stop = true;
+																	continue;
+																}
+																if(toklist[itr].string.trim() == ""){
+																	continue;
+																}
+																	linlist.insertAtEnd(toklist[itr].string);	console.log("inserted : " + toklist[itr].string);
+																		if(toklist[itr].string ==";"){		console.log("found ;");
+																	semicolonfound = 1;
+																	stop = true;
+																	notfound = false;
+																	break;
+																}
+															}
+														}
+														}	// end of for
+														if(stop == false){	console.log("stop is false after for loop with curline = " + curline);
+														if(curline+1 <= totallines){
+																curline++;	console.log("go to next line : " + curline);
+															itr = 0;
+														}
+														else{
+															stop = true;
+														}
+													}
+													}	// end of while
+												if(notfound == false){
+													// if(curline - 1 >= 0 ){
+														// 	iter = curline - 1;
+													// }
+													if(curline == iter){
+														iter = curline - 1;
+														tokChangeLabel = 1;
+														startToken = itr;
+													}
+													else {
+														iter = curline - 1;
+														tokChangeLabel = 0;
+														startToken = 0;
+													}
+													// iter = curline;
+														let exparr = linlist.printList();	console.log(exparr);
+													let typereturned = parseCode(exparr);
+													ttype = typereturned;
+														tvalue = linlist.printAsString(); 	console.log(tvalue);
+													pending = 0;
+													skip = true;
+												}
+		// break here
+												}	// end of else if
+										}
+									}
+									if(skip == false){
+											t++;
+									}
+									
+									}	// end of while
+								if(pending == 0){
+									STATUS_VAR_COUNT.innerHTML = ++var_count;
+									var_name_list.push(tname);
+										addObj(tname,ttype,tvalue);
+		console.log(tname + " , " + ttype + " , " + tvalue);
+								}
+							}
+						}
+					}
+				}
+				if(var_name_list.length != 0){
+					STATUS_VAR_LIST.innerHTML = JSON.stringify(var_name_list);
+					STATUS_VAR_TYPE_DETAILS.innerHTML = JSON.stringify(var_details);
+				}
+				else{
+					STATUS_VAR_LIST.innerHTML = "list emptty";
+				}
+			}
+			editor.on("cursorActivity", getV);
+			// editor.on("inputRead", getV);
+		
+			editor.on("inputRead", function(instance) {
+			if (instance.state.completionActive) {
+			return;
+			}
+			let cur = instance.getCursor();
+			let token = instance.getTokenAt(cur);
+			if (token.type && token.type != "comment") {
+			CodeMirror.commands.autocomplete(instance);
+			}
+			});
+			var STATUS_FUNC_DETAILS = document.getElementById("dispFuncDetails");
+			var STATUS_FUNC_COUNT = document.getElementById("dispFuncCount");
+			
+			function countFunctions(){
+				func_count = 0;
+				STATUS_FUNC_COUNT.innerHTML = 0;
+				STATUS_FUNC_DETAILS.innerHTML = "empty";
+				func_list = [];
+				let totallines = editor.lineCount();
+				for(let iter = 0; iter < totallines ; iter++){
+					let tokenlist = editor.getLineTokens(iter);
+					let tokcount = tokenlist.length;
+					for(t = 0 ; t < tokcount ; t++){
+						if(typeof(tokenlist[t]) != "undefined")
+						{
+							if(tokenlist[t].string == "function"){
+								func_count++;
+								if(typeof(tokenlist[t+2]) != "undefined"){
+									if(t+2 <= tokcount){
+										let obj = {"fid" : func_count , "fname" : tokenlist[t+2].string , "fline" : iter};
+											func_list.push(obj);
+															}
+								}
+							}
+						}
+					}
+				}
+				STATUS_FUNC_COUNT.innerHTML = func_count;
+				STATUS_FUNC_DETAILS.innerHTML = JSON.stringify(func_list);
+				
+				document.getElementById('selectFunction').innerHTML = "";
+				
+				if(func_count > 0){
+					let select_elem = document.getElementById('selectFunction');
+					for(let i = 0 ; i < func_list.length ; i++){
+						let option_elem = document.createElement('option');
+						option_elem.value = func_list[i].fid ;
+						option_elem.textContent = func_list[i].fname ;
+						// option_elem.addEventListener("click",function() { scrollToFunction(this); });
+							select_elem.appendChild(option_elem);
+					}
+				}
+				else{
+					let select_elem = document.getElementById('selectFunction');
+					let option_elem = document.createElement('option');
+					option_elem.value = null ;
+					option_elem.textContent = "-- no func yet --" ;
+							select_elem.appendChild(option_elem);
+				}
+			}
+			editor.on("cursorActivity",countFunctions);
+					function scrollToFunction(){
+								let val = document.getElementById('selectFunction').value;
+				let ln = 0;
+				if(val != null){
+					for(let fi = 0 ; fi < func_list.length ; fi++){
+						if(func_list[fi].fid == val){
+							ln = func_list[fi].fline ;
+						}
+					}
+					editor.focus();
+					editor.setCursor({line: ln , ch: 0});
+				}
+			}
+			function addObj(vname,vtype,vvalue){
+				let obj = { "var_name" : vname , "var_type" : vtype , "var_value" : vvalue };
+				var_details.push(obj);
+		console.log(JSON.stringify(obj));
+			}
+		// break here
+		var STATUS_SHOW_PARAM = document.getElementById("dispParam");
+		var STATUS_SHOW_PARAM_COUNT = document.getElementById("dispParamCount");
+		var STATUS_SHOW_CUR_PARAM = document.getElementById("dispCurParam");
+		var param_hint;
+		function getType(curcurs, openpos, closepos, toklist)
+		{
+		let stop = false;
+		let curline = curcurs.line;
+		let linlist = new LinkedList();
+		let tokcount = toklist.length;0
+		let itr = 0;
+		let inputcount = 0;
+		let notfound = true;
+		comma_pos = [];
+		// let rem = 3;
+		itr = openpos-1;
+		console.log("curcurs : " + curcurs);
+		console.log("toklist count: " + tokcount);
+		console.log("openpos : " + openpos);
+		while(stop == false && notfound == true){
+			for( ; itr >= 0 && stop == false ; itr--){
+				if(typeof(toklist[itr]) == "undefined"){
+					continue;
+				}
+				if(toklist[itr].string.trim() == "" || toklist[itr].string == "\t"){
+					continue;
+				}
+				if(toklist[itr].type == "keyword"){
+		stop = true;
+		break;
+		}
+		if(toklist[itr].string == "=" || toklist[itr].string == ";" || toklist[itr].string == "{" || toklist[itr].string == "}" ){
+		stop = true;
+		notfound = false;
+		break;
+		}
+				linlist.insertAtEnd(toklist[itr].string);		console.log("inserted now : " + toklist[itr].string);
+		inputcount++;
+					}		// end of for in while
+			if(stop == false){
+				if(curline -1 >= 0){
+					curline = curline-1;
+					toklist = editor.getLineTokens(curline);
+					tokcount = toklist.length;
+					itr = tokcount - 1;
+				}
+				else{
+					notfound = false;
+					stop = true;
+				}
+			}
+				}		// end of while
+		if(notfound == false){
+			// if(inputcount == 1){
+				// 	return linlist.printAsString();
+			// }
+			linlist.reverseList();
+			let arrexp = linlist.printList();
+			let explen = arrexp.length;
+					let expPart = arrexp.slice(0,explen-2);		console.log("expPart leng: " + expPart.length);
+			let param;
+			if(expPart.length == 1){
+				param = getParam(expPart[0],arrexp[explen-1]);
+			}
+			else{
+				expPart.push(";");
+				let rvalue = parseCode(expPart);
+					
+					console.log("rvalue is : " + rvalue);
+					console.log("print as list");
+					console.log(linlist.printList());
+					console.log("print as string");
+					console.log(linlist.printAsString());
+				param = getParam(rvalue,arrexp[explen-1]);
+			}
+			let np = param.length;
+			STATUS_SHOW_PARAM.innerHTML = param;
+			STATUS_SHOW_PARAM_COUNT.innerHTML = np;
+			STATUS_SHOW_CUR_PARAM.innerHTML = "";
+			if(np > 0){
+				for(let it = openpos; it < closepos; it++){
+					// if(typeof(toklist[it]) != "undefined"){
+						if(toklist[it].string == ","){
+							comma_pos.push(toklist[it].start);
+							if(comma_pos.length == np-1){
+								break;
+							}
+						}
+					// }
+				}
+				if(typeof(this.param_hint) != "undefined"){
+					if(this.param_hint.parentNode){
+						document.body.removeChild(this.param_hint);
+					}
+				}
+		console.log("start of box creation");
+				param_hint = this.param_hint = document.createElement("P");
+				param_hint.className = HINT_PARAM_CLASS;
+				param_hint.id = "parambox";
+				curpos = editor.cursorCoords(editor.getCursor());
+				param_hint.style.left = curpos.left + "px";
+				param_hint.style.top = (curpos.top - 60) + "px";
+				document.body.appendChild(param_hint);
+				parambox = document.getElementById("parambox");
+		console.log("after append box + comma leng " + comma_pos.length);
+				if(comma_pos.length == 0){
+							STATUS_SHOW_CUR_PARAM.innerHTML = param[0];
+					// param_hint.innerHTML = param[0];
+					parambox.innerHTML = param[0];
+					return;
+				}
+							for(let c = 0; c < comma_pos.length && c < np; c++){			console.log("wthin loop");
+					if(c == 0){
+						if(openbrackCh <= curcurs.ch && curcurs.ch <= comma_pos[c]){
+							STATUS_SHOW_CUR_PARAM.innerHTML = param[0];
+							parambox.innerHTML = param[0];
+		console.log("within comma 1");
+							break;
+						}
+					}
+					if(c == comma_pos.length-1){
+						if(comma_pos[c] <= curcurs.ch && curcurs.ch <= closebrackCh){
+							if(c == np-1){
+								STATUS_SHOW_CUR_PARAM.innerHTML = param[np-1];
+								parambox.innerHTML = param[np-1];
+								// this.param_hint.innerHTML = param[np-1];
+		console.log("within comma last");
+							}
+							else{
+								STATUS_SHOW_CUR_PARAM.innerHTML = param[c+1];
+							parambox.innerHTML = param[c+1];
+		console.log("within comma last");
+													}
+							break;
+						}
+					}
+					if(c+1 <= comma_pos.length){
+						if(comma_pos[c] <= curcurs.ch && curcurs.ch <= comma_pos[c+1]){
+							STATUS_SHOW_CUR_PARAM.innerHTML = param[c+1];
+							parambox.innerHTML = param[c+1];
+		console.log("within comma between");
+							break;
+						}
+					}
+				}
+		console.log("comma pos : " + JSON.stringify(comma_pos));
+			}
+			return ;
+		}
+			}		// end of fun
+		var HINT_PARAM_CLASS= "CodeMirror-hint-param";
+		var parambox;
+		var curpos;
+				function getParam(cls,fun){			console.log("getParam args : " + cls + " , " + fun);
+		let label = 0;
+				for(let ci = 0; ci < macro_classes.length && label == 0 ; ci++){
+			if(macro_classes[ci].class_name == cls){
+				for(let mi = 0 ; mi < macro_classes[ci].method.length ; mi++){
+					if(macro_classes[ci].method[mi].mname == fun){
+						// STATUS_SHOW_PARAM.innerHTML = macro_classes[ci].method[mi].parameters;
+						label = 1;
+						return macro_classes[ci].method[mi].parameters;
+					}
+				}
+			}
+		}
+		if(label == 0){
+			let varn = var_details.length;
+			for(let i = 0; i < varn; i++)
+			{
+				if(var_details[i].var_name == cls){
+					label = 1;
+					return getParam(var_details[i].var_type,fun);
+				}
+			}
+			if(label == 0){
+				return null;
+			}
+			// STATUS_SHOW_PARAM.innerHTML = "";
+		}
+		}
+		// break here
+		var paramDispOn = false;
+		var limitStart;
+		var limitEnd;
+		var limitLine;
+		var openbrackTokenPos;
+		var openbrackCh;
+		var closebrackCh;
+		var closebrackTokenPos;
+		var funOpen = false;
+		var closeBrackFound = false;
+		// var n_of_commas = -1;
+		var comma_pos = [];
+				function checkFunctionOpen(){			console.log("in checkFunctionOpen");
+		let cur = editor.getCursor();
+			let curToken = editor.getTokenAt(cur);	console.log(curToken.string);
+					if(curToken.string == "("){			console.log("yes fun open ");
+			funOpen = true;
+			limitStart = cur.ch;
+			limitLine = cur.line;
+			let tokens = editor.getLineTokens(cur.line);
+			let t;
+			for(let iter = 0 ; iter < tokens.length; iter++){
+				if(tokens[iter].end == cur.ch){
+					t = iter;
+					openbrackTokenPos = iter;
+					openbrackCh = tokens[iter].end;
+					break;
+				}
+			}
+			// checkInsideBrackets(cur);
+		}
+		}
+		editor.on("cursorActivity",checkFunctionOpen);
+		editor.on("cursorActivity",checkInsideBrackets);
+		function checkInsideBrackets(){
+		if(funOpen == false){
+			STATUS_SHOW_PARAM.innerHTML = "fun open false";
+			STATUS_SHOW_PARAM_COUNT.innerHTML = "";
+			STATUS_SHOW_CUR_PARAM.innerHTML = "";
+			// parambox.innerHTML = "";
+			if(typeof(this.param_hint) != "undefined"){
+				if(this.param_hint.parentNode){
+					document.body.removeChild(this.param_hint);
+				}
+			}
+			return;
+		}
+		let brackets = 0;
+		let cur = editor.getCursor();
+		let tokens = editor.getLineTokens(cur.line);
+		for (let iter = openbrackTokenPos; iter < tokens.length; iter++){
+			if(tokens[iter].string == "("){
+				brackets++;
+			}
+			if(tokens[iter].string == ")"){
+				brackets--;
+				if(brackets == 0){
+					limitEnd = tokens[iter].start;
+					closeBrackFound = true;
+					closebrackTokenPos = iter;
+					closebrackCh = tokens[iter].start;
+					break;
+				}
+			}
+		}
+		if(closeBrackFound == false){
+			return;
+		}
+		if(cur.line != limitLine){
+			funOpen = false;
+			paramDispOn = false;
+			STATUS_SHOW_PARAM.innerHTML = "not at line";
+			STATUS_SHOW_PARAM_COUNT.innerHTML = "";
+			STATUS_SHOW_CUR_PARAM.innerHTML = "";
+			parambox.innerHTML = "";
+			if(typeof(this.param_hint) != "undefined"){
+				if(this.param_hint.parentNode){
+					document.body.removeChild(this.param_hint);
+				}
+			}
+			return;
+		}
+		console.log("ls : " + limitStart); console.log("le : " + limitEnd); console.log("ll : " + limitLine); console.log("cc : " + cur.ch);
+				if( limitStart <= cur.ch && cur.ch <= limitEnd){		console.log("yes within limit");
+			paramDispOn = true;
+			STATUS_SHOW_PARAM.innerHTML = "parameters can show";
+			getType(cur,openbrackTokenPos,closebrackTokenPos,tokens);
+		}
+		else {
+			funOpen = false;
+			paramDispOn = false;
+			STATUS_SHOW_PARAM.innerHTML = "not within lmt";
+			STATUS_SHOW_PARAM_COUNT.innerHTML = "";
+			STATUS_SHOW_CUR_PARAM.innerHTML = "";
+			parambox.innerHTML = "";
+			if(typeof(this.param_hint) != "undefined"){
+				if(this.param_hint.parentNode){
+					document.body.removeChild(this.param_hint);
+				}
+			}
+			return;
+		}
+		}
+		// break here
+			const countChars = (instance) => {
+				let str = editor.getValue();
+					document.getElementById("liveCharCount").innerHTML = str.length;
+			}
+			editor.on("change",countChars);
+			function doRefresh(){
+				editor.refrsh();
+			}
+			function changeFontSize(size){
+				editor.getWrapperElement().style["font-size"] = size+"px";
+			}
+		// trial functions from here
+			function dispContent(){
+				document.getElementById("dispContent").innerHTML = editor.getValue();
+			}
+			function dispCharCount(){
+				let str = editor.getValue();
+				document.getElementById("charCount").innerHTML = str.length;
+			}
+			
+			function containsVar(curline){
+				let curtokelist = editor.getLineTokens(curline);
+				let ntoke = curtokelist.length;
+				for(let tc = 0; tc < ntoke ; tc++){
+					if(curtokelist[tc].string == "var" || curtokelist[tc].string == "let" || curtokelist[tc].string == "const"){
+						return true;
+					}
+				}
+			}
+			function containsSemicolon(curline){
+				let curtokelist = editor.getLineTokens(curline);
+				let ntoke = curtokelist.length;
+				for(let tc = 0; tc < ntoke ; tc++){
+					if(curtokelist[tc].string == ";"){
+											console.log("returned true");				return true;
+					}
+				}
+			}
+			function checkSemicolon(){
+				let cur = editor.getCursor();
+				let curtoke = editor.getTokenAt(cur);
+				if(curtoke.string == ";"){
+					getVariables();
+				}
+		console.log(curtoke.string);
+			}
+		function isClass(cstr){
+				for(let citer = 0 ; citer < macro_classes.length ; citer++){
+					if(macro_classes[citer].class_name == cstr){
+						return {"found" : true, "ctype" : macro_classes[citer].class_name};
+					}
+				}
+				return {"found" : "false"};
+			}
+			function isVariable(vstr){
+				for(let variter = 0 ; variter < var_details.length ; variter++){
+					if(var_details[variter].var_name == vstr){
+						console.log("found and " + var_details[variter].var_type);
+						return {"found" : true, "vtype" : var_details[variter].var_type};
+					}
+				}
+				return {"found" : "false"};
+			}
+			function checkIfVar(){
+				let cur = editor.getCursor();
+				// if(containsVar(cur.line) == true && containsSemicolon(cur.line) == true){
+					if(containsSemicolon(cur.line) == true){
+						getVariables();
+					}
+			}
+		function checkUndefined(){
+			let cur = editor.getCursor();
+			let ctoken = editor.getTokenAt(cur);
+			// if(ctoken.string == "="){
+				let undefVar = 0;
+				for(let i = 0 ; i < var_details.length ; i++){
+					if(var_details[i].var_type == "undefined"){
+						undefVar++;
+					}
+				}
+				console.log("undefVar is : " + undefVar);
+			// }
+			
+		}
+		editor.on("inputRead",checkUndefined);
+		</script>
+	</body>
+</html>

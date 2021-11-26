@@ -1,0 +1,13 @@
+create arrays : varlist
+	if var is found and also = is found
+		find the variable name between var and =
+	for storing the variable names along with the type of it 
+		(but how to get the type)
+	
+find the variable name or objct name or class name before . when . is pressed
+
+after var declarations everytime , assign the type to the variable name and store in varlist
+
+when . is presses after ] (i.e) at end of list/array
+	check if brackets is balanced then show functions fr array (todo)
+

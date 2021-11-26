@@ -1,0 +1,68 @@
+.CodeMirror-hints {
+  position: absolute;
+  z-index: 10;
+  overflow: hidden;
+  list-style: none;
+
+  margin: 0;
+  padding: 2px;
+
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  border-radius: 3px;
+  border: 1px solid silver;
+
+  background: white;
+  font-size: 90%;
+  font-family: monospace;
+
+  max-height: 20em;
+  overflow-y: auto;
+}
+
+.CodeMirror-hint {
+  margin: 0;
+  padding: 0 4px;
+  border-radius: 2px;
+  white-space: pre;
+  color: black;
+  cursor: pointer;
+}
+
+li.CodeMirror-hint-active {
+  background: #08f;
+  color: white;
+}
+
+.CodeMirror-hint-desc{
+  position: absolute;
+  font-size: 90%;
+  width: 200px;
+  height: 100px;
+  padding: 5px;
+  border-radius: 1px solid black;
+  background: blue;
+  color: white;
+  z-index: 15;
+  overflow: auto;
+}
+
+.CodeMirror-hint-short-desc{
+  float: right;
+  margin-left: 25px;
+  color: red;
+}
+
+.CodeMirror-hint-param{
+  position: absolute;
+  top : 0px;
+  left : 400px
+  padding: 10px;
+  z-index 100;
+  background: red;
+  color: white;
+  width: 200px;
+  height: 40px;
+  font-size: 85%;
+}

@@ -1,0 +1,96 @@
+var   x = 10   +   20;
+var str = "hello you are good";
+var list = ["1","abc", ""];
+var obj = [{"name" : "n1", "val" : "class"}];
+var count = 32;
+var n = count;
+function 
+"good"
+
+// next 
+
+ var x = 10;
+var y = [];
+var z = "hello";
+var a=SpreadSheet;
+var b =Edit.addBullet;
+
+a.
+
+
+// next 
+
+var x = 10; let y = x;
+const a = SpreadSheet.open()
+	.getActive()
+	.count();
+var x= 10;
+var y = SpreadSheet.open("u").open().open().getActive();
+let z = SpreadSheet.getActive(SpreadSheet.open()).count(); 
+let b = SpreadSheet.getActive(SpreadSheet.open());
+var spreadsheet = 10;
+const a = SpreadSheet;  
+
+//test 2
+
+var x= 10;
+var y = SpreadSheet.open("u")
+        .open( SpreadSheet.open() )
+        .open()
+        .getActive();
+let z = SpreadSheet.getActive(SpreadSheet.open(x.isDecimal()))
+					.count(x.isDecimal()); 
+
+let b = SpreadSheet.getActive(SpreadSheet.open());
+
+var spreadsheet = 10;
+
+const a = SpreadSheet.open().
+		getActive(); 
+
+
+
+// test 3
+
+var x= 10;
+var y = SpreadSheet.open("u")
+        .open( SpreadSheet.open() )
+        .open()
+        .getActive(
+          x.count()
+        );
+let z = SpreadSheet.getActive(SpreadSheet.open(x.isDecimal()).count())
+					.count(
+                      x.isDecimal(y.open())
+                    ); 
+
+let b = SpreadSheet.getActive(SpreadSheet.open());
+
+var spreadsheet = 10;
+
+const a = SpreadSheet.open().
+		getActive(); 
+
+// next 
+
+in google script:
+
+function mul(){
+var spreadsheet = SpreadsheetApp.getActive();
+var count = ["1","2"]
+var 2 = x;
+
+var obj = {}.
+
+}
+
+function simple(){
+  var y =10; 
+  y.
+  y = "10";
+
+var xx = "he";
+var xx = 22;
+xx = "hello";
+}
+var xx = 20;

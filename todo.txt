@@ -1,0 +1,189 @@
+Text Editor For Macro
+
+TO-DO List
+
+Things to keep note on : 
+
+- Which languages are supported
+- Tokens in the language - Keywords(var,func,etc..), syntax
+- Related libraries which contain the things needed for the code in that language
+- At the time of typing itself, compare the text typed with the token list, to find what is the text typed and apply styles accordingly
+- 
+
+
+Features to add :
+
+- Apply colors to differentiate tokens in the code (runtime)
+- User defined color palettes for applying colors
+- Undo, Redo
+- Cut, copy, Paste
+- Save, Run
+- Goto - line, functions, class, etc..
+- List of functions present in code
+- Autocomplete suggestions
+- Find and replace
+- Auto indentation
+- Hint box for parameters 
+- Hint about function (i.e. desc about the fun) when hovered
+- Pretty text (align text automatically based on brackets if not aligned code is found)
+- Bookmark
+- Some Smart features 
+- Miniature of code in right side (like in sublime text)
+- Switch themes (light, dark, etc..)
+- Show errors or warnings in code during runtime (i.e. wrong syntax eg. eclipse, android studio, etc..)
+- Get details about some functions and classes in library (eg. ctrl+click in android studio to view the class)
+- Group a set of code, take a function and use 'v' (down arrow) to expand and shrink the code (eg. in google sheet script editor)
+- Like jupiter notebook (think of)
+- List all keyboard shortcuts
+- Editor tour at startup
+- Settings to change things in editor (eg. tab settings, on and off some features, etc..)
+- Export code
+- Import code
+- View Live changes on code change
+- Show some sample macros (like beginner's guide)
+- Layouts (eg. 2col, 2row, grid)
+- Status bar (to show details like line no, tab size, type of code)
+- Menu bar (File, Edit, View, Goto, Tools)
+- Side panel for some tools
+- Change Font Style (Size)
+- Change Row height (line spacing)
+- Highlighter
+- Create user library (folder)
+- Change keyboard shortcuts by user
+- Insert tool - for inserting predefined strcture (eg. insert func template, insert class template)
+- Full screen mode
+- Pic-in-pic (pip) mode (or) Floating mode
+- Custom scroll bar
+- Display user details, version history
+- Console for viewing errors
+- Blocks mode - Reorder code easily by blocks mode (select an area of text and change it to block and move them by drag and drop, like in jupyter notebook)
+- Show number of - class, functions, words, lines
+- Wireframe of the code (show links of how things are interconnected)
+- Help menu
+- Display list of variables, functions of the class at right side panel (like in eclipse)
+- Show Documentation feature
+- 
+- 
+- 
+
+
+Token list :
+
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+
+Classes Required (separate files): 
+
+- Keymap
+- Edit
+- Settings
+- Goto
+- Layout
+- Mode
+- Count
+- Style
+- Token
+- Syntax Checker
+- Warnings and errors
+- 
+- 
+- 
+- 
+
+
+
+Funtions Required :
+
+	is___() functions 
+- 
+- 
+- 
+- 
+- 
+	switch___() functions
+- 
+- 
+- 
+- 
+- 
+- 
+	exec___() functions
+- 
+- 
+- 
+- 
+	check___() functions
+-
+-
+-
+-
+-
+	click() functions
+- 
+- 
+- 
+- 
+- 
+- 
+	select() functions
+- 
+- 
+- 
+- 
+- 
+- 
+	keyhit() functions
+- 
+- 
+- 
+- 
+- 
+- 
+	suggestion() functions
+
+
+	runtime analyzer() functions
+
+
+	() functions
+
+
+	() functions
+
+
+
+
+Event Listeners :
+
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+
+

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test invoking</title>
+	<script src="macro-list-test.js"></script>
+</head>
+<body>
+
+	<p>HEllo </p>
+	<!-- <p id="cdetails"></p>
+	<p id="mdetails"></p> -->
+	<p>Input string : <span id="ipdetails"></span></p>
+	<p>Return value : <span id="opdetails"></span></p>
+	<p> Macros details : <span id="classeslist"></span></p>
+
+
+</body>
+
+<script type="text/javascript">
+	
+	// let cshow = document.getElementById("cdetails");
+	// let mshow = document.getElementById("mdetails");
+	let macroshow = document.getElementById("classeslist");
+	let ipshow = document.getElementById("ipdetails");
+	let opshow = document.getElementById("opdetails");
+
+	macroshow.innerHTML = JSON.stringify(macro_classes);
+
+	function checkMacro(cname,mname){
+
+		// let cname = "SpreadSheet";
+		// let mname = "open";
+		let n = macro_classes.length;
+		var label  = 0;	
+	
+	// console.log("macro classes length : " + n);
+
+		for(let i = 0; i< n ; i++){
+			if(macro_classes[i].class_name == cname){
+				for(let j = 0; j < macro_classes[i].method.length ; j++){
+					if(macro_classes[i].method[j].mname == mname){
+		// console.log("inside inner if");
+						// cshow.innerHTML = cname;
+						// mshow.innerHTML = "found " + mname + " which returns " + macro_classes[i].method[j].returns ;
+						label = 1;
+						return macro_classes[i].method[j].returns;
+						// break;	
+					}
+				}
+			}
+		}
+
+		if(label == 0){
+			mshow.innerHTML = "method not found";
+			cshow.innerHTML = "class not found";
+			return null;
+		}
+		
+	}
+	
+	checkMacro("SpreadSheet","open");
+
+	class Node{
+
+		constructor(val){
+			this.value = val;
+			this.next = null;
+		}
+
+	}
+
+	class LinkedList{
+		
+		constructor(){
+			this.head = null;
+			this.tail = null;
+			this.size = 0;
+		}
+
+		insertAtEnd(val){
+			let node = new Node(val);
+			if(this.head == null){
+				this.head = node;
+				this.tail = node;
+				this.size++;
+			}
+			else {
+				this.tail.next = node;
+				this.tail = node;
+				this.size++;
+			}
+		}
+
+		deleteAtBeg(){
+
+		}
+
+		isEmpty(){
+			if(this.head == null){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+
+		printList(){
+			if(this.head == null){
+				return "list empty";
+			}
+			else {
+				let cur = this.head;
+				let arr = [];
+				while(cur != null){
+					arr.push(cur.value);
+					cur = cur.next;
+				}
+				return arr;
+			}
+		}
+
+		printAsString(){
+			if(this.head == null){
+				return "list empty";
+			}
+			else {
+				let cur = this.head;
+				let str = "";
+				while(cur != null){
+					str += cur.value;
+					cur = cur.next;
+				}
+				return str;
+			}	
+		}
+
+	}
+
+	let ll = new LinkedList();
+	ll.insertAtEnd("SpreadSheet");
+	ll.insertAtEnd(".");
+	ll.insertAtEnd("open");
+	ll.insertAtEnd("(");
+	ll.insertAtEnd("\"untitled\"");
+	ll.insertAtEnd(")");
+	ll.insertAtEnd(".");
+	ll.insertAtEnd("getActive");
+	ll.insertAtEnd("(");
+	ll.insertAtEnd("\"rows\"");
+	ll.insertAtEnd(")");
+	ll.insertAtEnd(".");
+	ll.insertAtEnd("count");
+	ll.insertAtEnd("(");
+	ll.insertAtEnd(")");
+	ll.insertAtEnd(";");
+
+// console.log("isEmpty : " + ll.isEmpty());
+console.log(ll.printList());
+
+	var answer = "nil";
+	let arr = ll.printList();
+	let output = parseCode(arr);
+console.log("output is : "+ output);
+	function parseCode(ls){
+
+// console.log("answer when entering parseCode is : " + answer);
+console.log("in parse func");
+		let lslen = ls.length;
+		for(let i = 0; i < lslen ; i++){
+
+			if(ls[i] == "("){
+				let check_str = checkMacro(ls[i-3] , ls[i-1]);
+
+				if(check_str == null){
+					answer = "not found";
+					return;
+				}
+
+				else if(check_str != null){
+					
+					answer = check_str;
+					let whileiter = i;
+					let dotindex = 0;
+					let dotlabel = 0;
+
+					while( whileiter < lslen){
+						if(ls[whileiter] == "."){
+							dotindex = whileiter;
+							dotlabel = 1;
+							break;
+						}
+						whileiter++;
+					}
+
+					if(dotlabel == 1){
+						if(ls[dotindex] == "." && ls[dotindex+2] == "("){
+	
+							let temparr = [];
+							temparr.push(answer);
+							console.log("answer : " + answer);					
+							answer = parseCode(temparr.concat( ls.slice(dotindex,lslen+1) ) );
+							return answer;
+
+						}
+					}
+					
+					else if( ls[i+2] == ";" || ls[i+3] == ";") {
+						return answer;
+					}			
+				}
+			}
+		}
+	}
+
+console.log("final ans is : " + answer);
+
+	// ipdetails.innerHTML = JSON.stringify(ll.printList());
+	ipdetails.innerHTML = ll.printAsString();
+	opdetails.innerHTML = answer;
+
+// console.log("check str : " + check_str);
+// console.log("in not null if");
+// console.log(temparr.concat( ls.slice(i+2,lslen) ));
+// console.log("answer : " + answer);
+// console.log("in ; if");						
+
+</script>
+
+
+</html>
