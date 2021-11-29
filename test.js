@@ -31,7 +31,6 @@ class LinkedList{
 	}
 
 	deleteAtBeg(){
-
 	}
 
 	isEmpty(){
@@ -157,10 +156,10 @@ function parseCode(ls){
 					}
 					whileiter++;
 				}
-console.log( "in parse code");
+				console.log( "in parse code");
 				if(dotlabel == 1){
 					if(ls[dotindex] == "." && ls[dotindex+2] == "("){
-console.log("in if of dotlabel");
+						console.log("in if of dotlabel");
 						let temparr = [];
 						temparr.push(answer);
 						console.log("answer : " + answer);					console.log("concat string ... : " + temparr.concat( ls.slice(dotindex,lslen+1) ));
