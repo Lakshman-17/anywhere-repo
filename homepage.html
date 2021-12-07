@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JS Macros Editor</title>
+
+	<!-- CodeMirror js files  -->
+
+	<script src="CodeMirror/lib/codemirror.js"></script>
+	<script src = "CodeMirror/fold/foldcode.js"></script>
+	<script src = "CodeMirror/fold/foldgutter.js"></script>
+	<script src = "CodeMirror/fold/brace-fold.js"></script>
+	<script src = "CodeMirror/mode/javascript.js"></script>
+	<script src = "CodeMirror/edit/matchbrackets.js"></script>
+	<script src = "CodeMirror/edit/closebrackets.js"></script>
+	<script src = "CodeMirror/keymap/sublime.js"></script>
+	<script src = "CodeMirror/keymap/vim.js"></script>
+	<!-- <script src = "CodeMirror/hint/show-hint.js"></script> -->
+	<!-- <script src = "CodeMirror/hint/javascript-hint.js"></script> -->
+	<!-- <script src = "CodeMirror/search/jump-to-line.js"></script> -->
+	<!-- <script src = "CodeMirror/search/searchcursor.js"></script> -->
+	<!-- <script src = "CodeMirror/search/search.js"></script> -->
+	<!-- <script src = "CodeMirror/dialog/dialog.js"></script> -->
+	<script src = "CodeMirror/scroll/simplescrollbars.js"></script>
+	<!-- <script src = "CodeMirror/lint/lint.js"></script> -->
+	<!-- <script src = "CodeMirror/lint/javascript-lint.js"></script> -->
+	<!-- <script src = "CodeMirror/lint/coffeescript-lint.js"></script> -->
+	<script src = "macro-classes.js"></script>
+	<script src = "test.js"></script>
+
+	<!-- CodeMirror css files -->
+
+	<link rel="stylesheet" type="text/css" href="CodeMirror/lib/codemirror.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/fold/foldgutter.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/theme/material-darker.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/hint/show-hint.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/search/matchesonscrollbar.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/dialog/dialog.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/scroll/simplescrollbars.css">
+
+</head>
+<style>
+	body{
+		background-color: gray;
+	}
+	.grid-container{
+		width: auto;
+		height: auto;
+		display: grid;
+		background-color: gray;
+		grid-gap: 3px;
+		grid-template-columns: repeat(6, 1fr);
+	}
+	.grid-container > div{
+		border: 1px solid black;
+		background-color: lightblue;
+		padding: 5px;
+	}
+	.item1{
+		grid-area: 'toppanel';
+		grid-column-start: 1;
+		grid-column-end: 7;
+		grid-row-start: 1;
+		grid-row-end: 2;
+	}
+	.item2{
+		grid-area: 'leftpanel';
+		grid-column-start: 1;
+		grid-column-end: 2;
+		grid-row-start: 2;
+		grid-row-end: 6;
+	}
+	.item3{
+		grid-area: 'workspace';
+		grid-column-start: 2;
+		grid-column-end: 7;
+		grid-row-start: 2;
+		grid-row-end: 6;
+		height: 600px;
+	/*	display: grid;
+		grid-area: 'editortools' 'editorarea' 'editorarea' 'editorarea' 'editorarea' 'editorarea';*/
+	}
+	.item4{
+		grid-area: 'editortools';
+		height: 10%;
+		border: 1px solid black;
+		/*grid-column-start: 1;
+		grid-column-end: 2;
+		grid-row-start: 1;
+		grid-row-end: 2;*/
+	}
+	.item5{
+		grid-area: 'editorarea';
+		height: 90%;
+		border: 1px solid black;
+	/*	grid-column-start: 1;
+		grid-column-end: 2;
+		grid-row-start: 2;
+		grid-row-end: 5;*/
+	}
+	#editorarea{
+		/*width: auto;
+		height: auto;
+		resize: none;*/
+	}
+</style>
+<body>
+	<div class = "grid-container">
+		<div class = "item1">top panel</div>
+		<div class = "item2">left panel</div>
+		<div class = "item3">
+			<div class = "item4">workspace tools</div>
+			<div class = "item5">
+				<textarea id="editorarea"> </textarea>
+				<script type="text/javascript">
+					var editor = CodeMirror.fromTextArea(document.getElementById("editorarea"), {
+						lineNumbers : true,
+						tabSize : 4,
+						mode : {name: "javascript", globalVars: true},
+						theme : "material-darker",
+						matchBrackets : true,
+						autoCloseBrackets : true,
+						autofocus : true,
+						foldGutter : true,
+						autohint: true,
+						gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"] ,
+						extraKeys : {"Ctrl-Space" : "autocomplete",
+									"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
+									"Shift-Tab" : "indentLess"
+									},
+						scrollbarStyle : "overlay",
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
