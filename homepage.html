@@ -76,39 +76,83 @@
 		grid-row-start: 2;
 		grid-row-end: 6;
 		height: 600px;
-	/*	display: grid;
-		grid-area: 'editortools' 'editorarea' 'editorarea' 'editorarea' 'editorarea' 'editorarea';*/
 	}
 	.item4{
 		grid-area: 'editortools';
 		height: 10%;
 		border: 1px solid black;
-		/*grid-column-start: 1;
-		grid-column-end: 2;
-		grid-row-start: 1;
-		grid-row-end: 2;*/
+		padding: 4px;
 	}
 	.item5{
 		grid-area: 'editorarea';
 		height: 90%;
 		border: 1px solid black;
-	/*	grid-column-start: 1;
-		grid-column-end: 2;
-		grid-row-start: 2;
-		grid-row-end: 5;*/
 	}
-	#editorarea{
-		/*width: auto;
+	.item1 > div{
+		display: inline;
+		background-color: gray;
+		padding: 3px;
+		margin: 2px;
+	}
+	.item2 > div{
+		width: auto;
 		height: auto;
-		resize: none;*/
+		background-color: gray;
+		padding: 3px;
+		margin: 2px;
+	}
+	.item4 > div{
+		display: inline;
+		/*background-color: gray;*/
+		padding: 3px;
+		margin: 2px;
+	}
+	.btn{
+		height: auto;
 	}
 </style>
 <body>
 	<div class = "grid-container">
-		<div class = "item1">top panel</div>
-		<div class = "item2">left panel</div>
+		<div class = "item1">
+			<div>js script logo</div>
+			<div>script namebox</div>
+			<div>deploy dropdown</div>
+		</div>
+		<div class = "item2">
+			<div>option 1</div>
+			<div>option 2</div>
+			<div>option 3</div>
+			<div>option 4</div>
+		</div>
 		<div class = "item3">
-			<div class = "item4">workspace tools</div>
+			<div class = "item4">
+				<div>
+					<button id="undobtn" class="btn">undo</button>
+				</div>
+				<div>
+					<button id="redobtn" class="btn">redo</button>
+				</div>
+				<div>
+					<button class="btn">save</button>
+				</div>
+				<div>
+					<button class="btn">run</button>
+				</div>
+				<div>
+					<button class="btn">debug</button>
+				</div>
+				<div>
+					<select id="selectFunction">
+						<option value = "null" selected>- no func yet -</option>
+					</select>
+				</div>
+				<div>
+					<button class="btn">execution log</button>
+				</div>
+				<div>
+					<button class="btn">switch to legacy</button>
+				</div>
+			</div>
 			<div class = "item5">
 				<textarea id="editorarea"> </textarea>
 				<script type="text/javascript">
@@ -133,5 +177,117 @@
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		// console.log("printing history " + JSON.stringify(doc.getHistory()));
+		// console.log("printing history size " + JSON.stringify(doc.historySize()));
+
+	</script>
+	<script type="text/javascript">
+		var doc = editor.getDoc();
+		var func_count = 0;
+		var func_list = [];
+
+		document.getElementById("undobtn").addEventListener("click",doundo);
+		document.getElementById("redobtn").addEventListener("click",doredo);
+		document.getElementById("redobtn").disabled = true;
+		document.getElementById("undobtn").disabled = true;
+		
+		function updateDos(){
+			console.log(doc.historySize().undo);
+			console.log(doc.historySize().redo);
+		}
+		editor.on("change",updateDos);
+
+		function doundo(){
+			editor.execCommand("undo");
+			if(doc.historySize().undo == 0){
+				document.getElementById("undobtn").disabled = true;		
+			}
+			else{
+				document.getElementById("undobtn").disabled = false;		
+			}
+			if(doc.historySize().redo == 0){
+				document.getElementById("redobtn").disabled = true;		
+			}
+			else{
+				document.getElementById("redobtn").disabled = false;		
+			}
+		}
+
+		function doredo(){
+			editor.execCommand("redo");
+			if(doc.historySize().undo == 0){
+				document.getElementById("undobtn").disabled = true;		
+			}
+			else{
+				document.getElementById("undobtn").disabled = false;		
+			}
+			if(doc.historySize().redo == 0){
+				document.getElementById("redobtn").disabled = true;		
+			}
+			else{
+				document.getElementById("redobtn").disabled = false;		
+			}
+		}
+
+		function countFunctions(){
+			func_count = 0;
+			func_list = [];
+			let totallines = editor.lineCount();
+			for(let iter = 0; iter < totallines ; iter++){
+				let tokenlist = editor.getLineTokens(iter);
+				let tokcount = tokenlist.length;
+				for(t = 0 ; t < tokcount ; t++){
+					if(typeof(tokenlist[t]) != "undefined")
+					{
+						if(tokenlist[t].string == "function"){
+							func_count++;
+							if(typeof(tokenlist[t+2]) != "undefined"){
+								if(t+2 <= tokcount){
+									let obj = {"fid" : func_count , "fname" : tokenlist[t+2].string , "fline" : iter};
+									func_list.push(obj);
+								}
+							}
+						}
+					}
+				}
+			}
+			document.getElementById('selectFunction').innerHTML = "";
+
+			if(func_count > 0){
+				let select_elem = document.getElementById('selectFunction');
+				for(let i = 0 ; i < func_list.length ; i++){
+					let option_elem = document.createElement('option');
+					option_elem.value = func_list[i].fid ;
+					option_elem.textContent = func_list[i].fname ;
+					select_elem.appendChild(option_elem);
+				}
+			}
+			else{
+				let select_elem = document.getElementById('selectFunction');
+				let option_elem = document.createElement('option');
+				option_elem.value = null ;
+				option_elem.textContent = "-- no func yet --" ;
+				select_elem.appendChild(option_elem);
+			}
+		}
+		editor.on("cursorActivity",countFunctions);
+		
+		function scrollToFunction(){
+			let val = document.getElementById('selectFunction').value;
+			let ln = 0;
+			if(val != null){
+				for(let fi = 0 ; fi < func_list.length ; fi++){
+					if(func_list[fi].fid == val){
+						ln = func_list[fi].fline ;
+					}
+				}
+				editor.focus();
+				editor.setCursor({line: ln , ch: 0});
+			}
+		}
+		document.getElementById("selectFunction").addEventListener("change",scrollToFunction);
+	</script>
 </body>
+
 </html>
