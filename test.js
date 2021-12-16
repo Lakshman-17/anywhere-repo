@@ -142,27 +142,27 @@ function parseCode(ls){
 				let dotindex = 0;
 				let dotlabel = 0;
 
-				while( whileiter < lslen){		console.log("inside while whileiter");
+				while( whileiter < lslen){		//console.log("inside while whileiter");
 					if(ls[whileiter] == "("){	
-						brackcount++;				console.log("brackcount in ( : " + brackcount);
+						brackcount++;				//console.log("brackcount in ( : " + brackcount);
 					}
 					if(ls[whileiter] == ")"){
-						brackcount--;				console.log("brackcount in ) : " + brackcount);
+						brackcount--;				//console.log("brackcount in ) : " + brackcount);
 					}
-					if(ls[whileiter-1] == ")" && ls[whileiter] == "." && brackcount == 0){		console.log("if passed of brackcount = 0");
+					if(ls[whileiter-1] == ")" && ls[whileiter] == "." && brackcount == 0){		//console.log("if passed of brackcount = 0");
 						dotindex = whileiter;
 						dotlabel = 1;
 						break;
 					}
 					whileiter++;
 				}
-				console.log( "in parse code");
+				// console.log( "in parse code");
 				if(dotlabel == 1){
 					if(ls[dotindex] == "." && ls[dotindex+2] == "("){
-						console.log("in if of dotlabel");
+						//console.log("in if of dotlabel");
 						let temparr = [];
 						temparr.push(answer);
-						console.log("answer : " + answer);					console.log("concat string ... : " + temparr.concat( ls.slice(dotindex,lslen+1) ));
+						//console.log("answer : " + answer);					console.log("concat string ... : " + temparr.concat( ls.slice(dotindex,lslen+1) ));
 						answer = parseCode(temparr.concat( ls.slice(dotindex,lslen+1) ) );
 
 						return answer;

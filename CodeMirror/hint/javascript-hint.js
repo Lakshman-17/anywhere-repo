@@ -183,12 +183,12 @@
     }
 
     function getCompletions(token, context, keywords, options) {
-        console.log("inside getCompletions");
+        // console.log("inside getCompletions");
         var found = [],
             start = token.string,
             global = options && options.globalScope || window;
-        console.log("start : " + start);
-        console.log("keywords : " + keywords);
+        // console.log("start : " + start);
+        // console.log("keywords : " + keywords);
 
         function maybeAdd(det) {
             let str = det.name;
@@ -196,7 +196,7 @@
         }
 
         function gatherCompletions(obj) {
-            console.log("in gatherCompletions");
+            // console.log("in gatherCompletions");
 
             if (typeof obj == "string") forEach(stringProps, maybeAdd);
             else if (obj instanceof Array) forEach(arrayProps, maybeAdd);
@@ -232,7 +232,7 @@
                 // break here  
                 let equalisreached = 0;
                 let curcurs = editor.getCursor();
-                console.log(curcurs);
+                // console.log(curcurs);
                 let curline = curcurs.line;
                 let curchar = curcurs.ch;
                 let linlist = new LinkedList();
@@ -259,7 +259,7 @@
                         if (typeof(toklist[itr]) == "undefined") {
                             continue;
                         }
-                        console.log("hehe" + toklist[itr].string + "hehe");
+                        // console.log("hehe" + toklist[itr].string + "hehe");
 
                         if (toklist[itr].string.trim() == "" || toklist[itr].string == "\t") {
                             continue;
@@ -288,6 +288,7 @@
                             itr = tokcount - 1;
                         } else {
                             stop = true;
+                            notfound = false;
                         }
                     }
 
