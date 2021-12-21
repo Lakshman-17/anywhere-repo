@@ -1,0 +1,109 @@
+body{
+	background-color: gray;
+}
+.grid-container{
+	width: auto;
+	height: auto;
+	display: grid;
+	background-color: gray;
+	grid-gap: 3px;
+	grid-template-columns: repeat(6, 1fr);
+}
+.grid-container > div{
+	border: 1px solid black;
+	background-color: lightblue;
+	padding: 5px;
+}
+.item1{
+	/*grid-area: 'toppanel';*/
+	grid-column-start: 1;
+	grid-column-end: 7;
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
+.item2{
+	/*grid-area: 'leftpanel';*/
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 2;
+	grid-row-end: 6;
+}
+.item3{
+	/*grid-area: 'workspace';*/
+	grid-column-start: 2;
+	grid-column-end: 7;
+	grid-row-start: 2;
+	grid-row-end: 6;
+	height: 600px;
+}
+.item4{
+	/*grid-area: 'editortools';*/
+	height: 10%;
+	border: 1px solid black;
+	padding: 4px;
+}
+.item5{
+	/*grid-area: 'editorarea';*/
+	height: 90%;
+	border: 1px solid black;
+}
+.item1 > div{
+	display: inline;
+	background-color: gray;
+	padding: 3px;
+	margin: 2px;
+}
+/*.item2 > div{
+	width: auto;
+	height: auto;
+	background-color: gray;
+	padding: 3px;
+	margin: 2px;
+}*/
+.item4 > div{
+	display: inline;
+	/*background-color: gray;*/
+	padding: 3px;
+	margin: auto 4px auto 4px;
+}
+.btn{
+	height: auto;
+}
+.option-list{
+	width: 100%;
+	/*height: 40px;*/
+	/*margin: 4px 0 4px 0;*/
+	/*padding: 3px;*/
+	margin-bottom: 4px;
+}
+.option{
+	width: 75%;
+	height: 40px;
+	float: left;
+	background-color: yellow;
+	padding: 2px;
+	margin-bottom: 4px;
+}
+.plusbtn{
+	width: 20%;
+	height: 40px;
+	float: right;
+	background-color: orange;
+	text-align: center;
+	/*align-content: center;*/
+	vertical-align: middle;
+
+	font-size: 27px; 
+	padding: 2px;
+	margin-bottom: 4px;
+}
+#functionlist{
+	width: 200px;
+}
+#selectFunction{
+	width: 200px;
+	max-width: 200px;
+}
+#selectFunction > option {
+	width: 200px;
+}

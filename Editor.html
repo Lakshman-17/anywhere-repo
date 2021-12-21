@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Macro Page Layout</title>
+
+	<link rel="stylesheet" type="text/css" href="Editor.css">
+
+	<script src="CodeMirror/lib/codemirror.js"></script>
+	<script src = "CodeMirror/fold/foldcode.js"></script>
+	<script src = "CodeMirror/fold/foldgutter.js"></script>
+	<script src = "CodeMirror/fold/brace-fold.js"></script>
+	<script src = "CodeMirror/mode/javascript.js"></script>
+	<script src = "CodeMirror/edit/matchbrackets.js"></script>
+	<script src = "CodeMirror/edit/closebrackets.js"></script>
+	<script src = "CodeMirror/keymap/sublime.js"></script>
+	<script src = "CodeMirror/keymap/vim.js"></script>
+	<script src = "CodeMirror/hint/show-hint.js"></script>
+	<script src = "CodeMirror/hint/javascript-hint.js"></script>
+	<!-- <script src = "CodeMirror/search/jump-to-line.js"></script> -->
+	<!-- <script src = "CodeMirror/search/searchcursor.js"></script> -->
+	<!-- <script src = "CodeMirror/search/search.js"></script> -->
+	<!-- <script src = "CodeMirror/dialog/dialog.js"></script> -->
+	<script src = "CodeMirror/scroll/simplescrollbars.js"></script>
+	<!-- <script src = "CodeMirror/lint/lint.js"></script> -->
+	<!-- <script src = "CodeMirror/lint/javascript-lint.js"></script> -->
+	<!-- <script src = "CodeMirror/lint/coffeescript-lint.js"></script> -->
+	<script src = "macro-classes.js"></script>
+	<script src = "test.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="CodeMirror/lib/codemirror.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/fold/foldgutter.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/theme/material-darker.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/hint/show-hint.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/search/matchesonscrollbar.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/dialog/dialog.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/scroll/simplescrollbars.css">
+
+</head>
+<body>
+	<div id="wrapper">
+		<div id="title"></div>
+		<div id="container">
+			<div id="leftpane"></div>
+			<div id="tools"></div>
+			<div id="editorbox"></div>
+		</div>
+	</div>
+
+	<template id="JSMACRO-TITLE">
+		<div id="jsmacro-title" class="item1">
+			<div>js script logo</div>
+			<div>script namebox</div>
+			<div>deploy dropdown</div>
+		</div>
+	</template>
+
+	<template id="JSMACRO-LEFTPANE">
+		<div id="leftOptions" class="item2">
+			<div class = "option-list">
+				<div class = "option">option 1</div>
+				<div class = "plusbtn">+</div>
+				<div id="sub-options">
+					<ul id="sub-list">
+						<li>list1</li>
+						<li>list2</li>
+						<li>list3</li>
+					</ul>
+				</div>
+			</div>
+			<div class = "option-list">
+				<div class = "option">option 2</div>
+				<div class = "plusbtn">+</div>
+			</div>
+			<div class = "option-list">
+				<div class = "option">option 3</div>
+				<div class = "plusbtn">+</div>
+			</div>
+			<div class = "option-list">
+				<div class = "option">option 4</div>
+				<div class = "plusbtn">+</div>
+			</div>
+		</div>
+	</template>
+
+	<template id="JSMACRO-LEFTPANE-SUBOPTIONS">
+		<div class="sub-options-list">
+			<ul id="sub-list">
+				<li>list1</li>
+				<li>list2</li>
+				<li>list3</li>
+			</ul>
+		</div>
+	</template>
+
+	<template id="JSMACRO-EDITORMENU">
+		<div id="editor-menu" class="item3">
+			<div>
+				<button id="undobtn" class="btn">undo</button>
+			</div>
+			<div>
+				<button id="redobtn" class="btn">redo</button>
+			</div>
+			<div>
+				<button id="savebtn" class="btn">save</button>
+			</div>
+			<div>
+				<button id="runbtn" class="btn">run</button>
+			</div>
+			<div>
+				<button class="btn">debug</button>
+			</div>
+			<div id="functionlist">
+				<select id="selectFunction">
+					<option value = "null" selected>- no func yet -</option>
+				</select>
+			</div>
+			<div>
+				<button class="btn">execution log</button>
+			</div>
+			<div>
+				<button class="btn">switch to legacy</button>
+			</div>
+		</div>
+	</template>
+
+	<template id="JSMACRO-EDITORBLOCK">
+		<div id="editorblock" class="item4">
+			<textarea id="editorarea"> </textarea>
+		</div>
+	</template>
+</body>
+<script type="text/javascript" src="Editor.js"></script>
+</html>

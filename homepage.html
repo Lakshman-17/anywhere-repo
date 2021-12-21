@@ -143,17 +143,38 @@
 	}
 	#selectFunction{
 		width: 200px;
+		max-width: 200px;
+	}
+	#selectFunction > option {
+		width: 200px;
 	}
 </style>
 <body>
-	<div class = "grid-container">
-		<div class = "item1">
-			<div>js script logo</div>
-			<div>script namebox</div>
-			<div>deploy dropdown</div>
+	<template id="item1ElementTemplate">
+		<div></div>	
+	</template>
+	
+	<template id="item2ElementTemplate">
+		<div class = "option-list">
+			<div class = "option">option 1</div>
+			<div class = "plusbtn">+</div>
 		</div>
-		<div class = "item2">
-			<div class = "option-list">
+	</template>
+	
+	<template id="item4ElementTemplate">
+		<div>
+			<button id="undobtn" class="btn">undo</button>
+		</div>
+	</template>
+
+	<div class = "grid-container">
+		<div id="item1" class="item1">
+			<!-- <div>js script logo</div>
+			<div>script namebox</div>
+			<div>deploy dropdown</div> -->
+		</div>
+		<div id="item2" class="item2">
+		<!-- 	<div class = "option-list">
 				<div class = "option">option 1</div>
 				<div class = "plusbtn">+</div>
 			</div>
@@ -168,7 +189,7 @@
 			<div class = "option-list">
 				<div class = "option">option 4</div>
 				<div class = "plusbtn">+</div>
-			</div>
+			</div> -->
 		</div>
 		<div class = "item3">
 			<div class = "item4">
@@ -224,9 +245,44 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		// console.log("printing history " + JSON.stringify(doc.getHistory()));
-		// console.log("printing history size " + JSON.stringify(doc.historySize()));
+		var item1 = document.getElementById("item1ElementTemplate");
+		var item2 = document.getElementById("item2ElementTemplate");
+		var item1ElemList = ["script logo", "script title", "deploy dropdown"];
+		var item2ElemList = ["option1", "option2", "option3", "option4"];
 
+		var itemListDetails = { "elemtype":"button", "value":"undo", "class":"button", "id":"undoButton", "events":{"eventtype":"click", "listenerfunc":doUndoAction}
+		};
+
+		if("content" in document.createElement("template")){
+			for(var iter = 0; iter < 3; iter++){
+				var clone = item1.content.cloneNode(true);
+				clone.querySelector("div").textContent = item1ElemList[iter];
+				document.getElementById("item1").appendChild(clone);
+			}
+
+			for(var iter = 0; iter < 4; iter++){
+				var clone = item2.content.cloneNode(true);
+				clone.querySelector(".option").textContent = item2ElemList[iter];
+				document.getElementById("item2").appendChild(clone);
+			}
+		}
+
+		function doUndoAction(){
+			editor.execCommand("undo");
+		}
+
+		// var clone = item1.content.cloneNode(true);
+		// var elem = document.createElement(itemListDetails.elemtype);
+		// elem.id = itemListDetails.id;
+		// elem.class = itemListDetails.class;
+		// elem.innerHTML = itemListDetails.value;
+		// document.addEventListener(itemListDetails.events.eventtype,itemListDetails.events.listenerfunc);
+		// clone.querySelector("div").appendChild(elem);
+		// document.getElementById("item1").appendChild(clone);
+
+		// var templ = [{"elemtype": "div", "value":"logo", "class":"", "id":"", "parentelem":"", "events":{"eventype":"click", "listenerfunc":""}}];
+		// using this json details we shall add new elements under each segment easily
+		
 	</script>
 	<script type="text/javascript">
 		var doc = editor.getDoc();
@@ -302,6 +358,7 @@
 					var option_elem = document.createElement('option');
 					option_elem.value = func_list[i].fid ;
 					option_elem.textContent = func_list[i].fname ;
+					option_elem.style.width = '150px';
 					select_elem.appendChild(option_elem);
 				}
 			}
@@ -310,6 +367,7 @@
 				var option_elem = document.createElement('option');
 				option_elem.value = null ;
 				option_elem.textContent = "-- no func yet --" ;
+				option_elem.style.width = '150p';
 				select_elem.appendChild(option_elem);
 			}
 		}
@@ -322,6 +380,7 @@
 				for(var fi = 0 ; fi < func_list.length ; fi++){
 					if(func_list[fi].fid == val){
 						ln = func_list[fi].fline ;
+						func_list[fi].selectedIndex = fi;
 					}
 				}
 				editor.focus();
@@ -525,7 +584,7 @@
 		editor.on("cursorActivity", getV);
 
 		function addObj(vname,vtype,vvalue){
-			let obj = { "var_name" : vname , "var_type" : vtype , "var_value" : vvalue };
+			var obj = { "var_name" : vname , "var_type" : vtype , "var_value" : vvalue };
 			var_details.push(obj);
 			console.log(JSON.stringify(obj));
 		}
@@ -548,18 +607,18 @@
 		// var STATUS_SHOW_PARAM = document.getElementById("dispParam");
 		// var STATUS_SHOW_PARAM_COUNT = document.getElementById("dispParamCount");
 		// var STATUS_SHOW_CUR_PARAM = document.getElementById("dispCurParam");
-		var param_hint;
 		
 		function getType(curcurs, openpos, closepos, toklist){
-			let stop = false;
-			let curline = curcurs.line;
-			let linlist = new LinkedList();
-			let tokcount = toklist.length;0
-			let itr = 0;
-			let inputcount = 0;
-			let notfound = true;
+			console.log("openpos : " + openpos + " , closepos : " + closepos + " ,  toklist : " + toklist);
+			var stop = false;
+			var curline = curcurs.line;
+			var linlist = new LinkedList();
+			var tokcount = toklist.length;0
+			var itr = 0;
+			var inputcount = 0;
+			var notfound = true;
 			comma_pos = [];
-			// let rem = 3;
+			// var rem = 3;
 			itr = openpos-1;
 			// console.log("curcurs : " + curcurs);
 			// console.log("toklist count: " + tokcount);
@@ -581,7 +640,7 @@
 						notfound = false;
 						break;
 					}
-					linlist.insertAtEnd(toklist[itr].string);		console.log("inserted now : " + toklist[itr].string);
+					linlist.insertAtEnd(toklist[itr].string);		//console.log("inserted now : " + toklist[itr].string);
 					inputcount++;
 				}		// end of for in while
 				if(stop == false){
@@ -602,16 +661,16 @@
 					// 	return linlist.printAsString();
 				// }
 				linlist.reverseList();
-				let arrexp = linlist.printList();
-				let explen = arrexp.length;
-				let expPart = arrexp.slice(0,explen-2);		console.log("expPart leng: " + expPart.length);
-				let param;
+				var arrexp = linlist.printList();
+				var explen = arrexp.length;
+				var expPart = arrexp.slice(0,explen-2);		console.log("expPart leng: " + expPart.length);
+				var param;
 				if(expPart.length == 1){
 					param = getParam(expPart[0],arrexp[explen-1]);
 				}
 				else{
 					expPart.push(";");
-					let rvalue = parseCode(expPart);
+					var rvalue = parseCode(expPart);
 					console.log("rvalue is : " + rvalue);
 					// console.log("print as list");
 					// console.log(linlist.printList());
@@ -619,12 +678,12 @@
 					console.log(linlist.printAsString());
 					param = getParam(rvalue,arrexp[explen-1]);
 				}
-				let np = param.length;
+				var np = param.length;
 				// STATUS_SHOW_PARAM.innerHTML = param;
 				// STATUS_SHOW_PARAM_COUNT.innerHTML = np;
 				// STATUS_SHOW_CUR_PARAM.innerHTML = "";
 				if(np > 0){
-					for(let it = openpos; it < closepos; it++){
+					for(var it = openpos; it < closepos; it++){
 						// if(typeof(toklist[it]) != "undefined"){
 						if(toklist[it].string == ","){
 							comma_pos.push(toklist[it].start);
@@ -655,12 +714,12 @@
 						parambox.innerHTML = param[0];
 						return;
 					}
-					for(let c = 0; c < comma_pos.length && c < np; c++){			console.log("wthin loop");
+					for(var c = 0; c < comma_pos.length && c < np; c++){			//console.log("wthin loop");
 						if(c == 0){
 							if(openbrackCh <= curcurs.ch && curcurs.ch <= comma_pos[c]){
 								// STATUS_SHOW_CUR_PARAM.innerHTML = param[0];
 								parambox.innerHTML = param[0];
-								console.log("within comma 1");
+								// console.log("within comma 1");
 								break;
 							}
 						}
@@ -670,12 +729,12 @@
 									// STATUS_SHOW_CUR_PARAM.innerHTML = param[np-1];
 									parambox.innerHTML = param[np-1];
 									// this.param_hint.innerHTML = param[np-1];
-									console.log("within comma last");
+									// console.log("within comma last");
 								}
 								else{
 									// STATUS_SHOW_CUR_PARAM.innerHTML = param[c+1];
 									parambox.innerHTML = param[c+1];
-									console.log("within comma last");
+									// console.log("within comma last");
 								}
 								break;
 							}
@@ -684,7 +743,7 @@
 							if(comma_pos[c] <= curcurs.ch && curcurs.ch <= comma_pos[c+1]){
 								// STATUS_SHOW_CUR_PARAM.innerHTML = param[c+1];
 								parambox.innerHTML = param[c+1];
-								console.log("within comma between");
+								// console.log("within comma between");
 								break;
 							}
 						}
@@ -699,11 +758,11 @@
 		var parambox;
 		var curpos;
 				
-		function getParam(cls,fun){			console.log("getParam args : " + cls + " , " + fun);
-			let label = 0;
-			for(let ci = 0; ci < macro_classes.length && label == 0 ; ci++){
+		function getParam(cls,fun){			//console.log("getParam args : " + cls + " , " + fun);
+			var label = 0;
+			for(var ci = 0; ci < macro_classes.length && label == 0 ; ci++){
 				if(macro_classes[ci].class_name == cls){
-				for(let mi = 0 ; mi < macro_classes[ci].method.length ; mi++){
+				for(var mi = 0 ; mi < macro_classes[ci].method.length ; mi++){
 					if(macro_classes[ci].method[mi].mname == fun){
 						// STATUS_SHOW_PARAM.innerHTML = macro_classes[ci].method[mi].parameters;
 						label = 1;
@@ -713,8 +772,8 @@
 			}
 		}
 		if(label == 0){
-			let varn = var_details.length;
-			for(let i = 0; i < varn; i++)
+			var varn = var_details.length;
+			for(var i = 0; i < varn; i++)
 			{
 				if(var_details[i].var_name == cls){
 					label = 1;
@@ -728,6 +787,7 @@
 		}
 		}
 		// break here
+		var param_hint;
 		var paramDispOn = false;
 		var limitStart;
 		var limitEnd;
@@ -741,18 +801,18 @@
 		// var n_of_commas = -1;
 		var comma_pos = [];
 		
-		function checkFunctionOpen(){			console.log("in checkFunctionOpen");
-			let cur = editor.getCursor();
-			let curToken = editor.getTokenAt(cur);	console.log(curToken.string);
-			if(curToken.string == "("){			console.log("yes fun open ");
+		function checkFunctionOpen(){			//console.log("in checkFunctionOpen");
+			var cur = editor.getCursor();
+			var curToken = editor.getTokenAt(cur);	//console.log(curToken.string);
+			if(curToken.string == "("){			//console.log("yes fun open ");
 				funOpen = true;
 				limitStart = cur.ch;
 				limitLine = cur.line;
-				let tokens = editor.getLineTokens(cur.line);
-				let t;
-				for(let iter = 0 ; iter < tokens.length; iter++){
+				var tokens = editor.getLineTokens(cur.line);
+				// var t;
+				for(var iter = 0 ; iter < tokens.length; iter++){
 					if(tokens[iter].end == cur.ch){
-						t = iter;
+						// t = iter;
 						openbrackTokenPos = iter;
 						openbrackCh = tokens[iter].end;
 						break;
@@ -763,6 +823,18 @@
 		}
 		editor.on("cursorActivity",checkFunctionOpen);
 		
+		// editor.on("inputRead",checkDisplayParam);
+
+		// function checkDisplayParam(){
+		// 	var curs = editor.getCursor();
+		// 	var token = editor.getTokenAt(curs);
+		// 	if(token.string == "("){
+		// 		checkFunctionOpen();
+		// 		checkInsideBrackets();
+		// 	}
+		// }
+
+
 		editor.on("cursorActivity",checkInsideBrackets);
 		
 		function checkInsideBrackets(){
@@ -778,10 +850,10 @@
 				}
 				return;
 			}
-			let brackets = 0;
-			let cur = editor.getCursor();
-			let tokens = editor.getLineTokens(cur.line);
-			for (let iter = openbrackTokenPos; iter < tokens.length; iter++){
+			var brackets = 0;
+			var cur = editor.getCursor();
+			var tokens = editor.getLineTokens(cur.line);
+			for (var iter = openbrackTokenPos; iter < tokens.length; iter++){
 				if(tokens[iter].string == "("){
 					brackets++;
 				}

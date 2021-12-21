@@ -1,0 +1,84 @@
+<template id="JSMACRO-TITLE">
+	<div id="jsmacro-title" class="item1">
+		<div>js script logo</div>
+		<div>script namebox</div>
+		<div>deploy dropdown</div>
+	</div>
+</template>
+
+<template id="JSMACRO-LEFTPANE">
+	<div id="leftpane" class="item2">
+		<div class = "option-list">
+			<div class = "option">option 1</div>
+			<div class = "plusbtn">+</div>
+		</div>
+		<div class = "option-list">
+			<div class = "option">option 2</div>
+			<div class = "plusbtn">+</div>
+		</div>
+		<div class = "option-list">
+			<div class = "option">option 3</div>
+			<div class = "plusbtn">+</div>
+		</div>
+		<div class = "option-list">
+			<div class = "option">option 4</div>
+			<div class = "plusbtn">+</div>
+		</div>
+	</div>
+</template>
+
+<template id="JSMACRO-EDITORMENU">
+	<div id="editor-menu" class="item3">
+		<div>
+			<button id="undobtn" class="btn">undo</button>
+		</div>
+		<div>
+			<button id="redobtn" class="btn">redo</button>
+		</div>
+		<div>
+			<button id="savebtn" class="btn">save</button>
+		</div>
+		<div>
+			<button id="runbtn" class="btn">run</button>
+		</div>
+		<div>
+			<button class="btn">debug</button>
+		</div>
+		<div id="functionlist">
+			<select id="selectFunction">
+				<option value = "null" selected>- no func yet -</option>
+			</select>
+		</div>
+		<div>
+			<button class="btn">execution log</button>
+		</div>
+		<div>
+			<button class="btn">switch to legacy</button>
+		</div>
+	</div>
+</template>
+
+<template id="JSMACRO-EDITORBLOCK">
+	<div id="editorblock" class="item4">
+		<textarea id="editorarea"> </textarea>
+		<script type="text/javascript">
+			var editor = CodeMirror.fromTextArea(document.getElementById("editorarea"), {
+				lineNumbers : true,
+				tabSize : 4,
+				mode : {name: "javascript", globalVars: true},
+				theme : "material-darker",
+				matchBrackets : true,
+				autoCloseBrackets : true,
+				autofocus : true,
+				foldGutter : true,
+				autohint: true,
+				gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"] ,
+				extraKeys : {"Ctrl-Space" : "autocomplete",
+							"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
+							"Shift-Tab" : "indentLess"
+							},
+				scrollbarStyle : "overlay",
+			});
+		</script>
+	</div>
+</template>
