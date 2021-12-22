@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Macro Layout 1</title>
+
+	<script src="CodeMirror/lib/codemirror.js"></script>
+	<script src = "CodeMirror/fold/foldcode.js"></script>
+	<script src = "CodeMirror/fold/foldgutter.js"></script>
+	<script src = "CodeMirror/fold/brace-fold.js"></script>
+	<script src = "CodeMirror/mode/javascript.js"></script>
+	<script src = "CodeMirror/edit/matchbrackets.js"></script>
+	<script src = "CodeMirror/edit/closebrackets.js"></script>
+	<script src = "CodeMirror/keymap/sublime.js"></script>
+	<script src = "CodeMirror/keymap/vim.js"></script>
+	<script src = "CodeMirror/hint/show-hint.js"></script>
+	<script src = "CodeMirror/hint/javascript-hint.js"></script>
+	<!-- <script src = "CodeMirror/search/jump-to-line.js"></script> -->
+	<!-- <script src = "CodeMirror/search/searchcursor.js"></script> -->
+	<!-- <script src = "CodeMirror/search/search.js"></script> -->
+	<!-- <script src = "CodeMirror/dialog/dialog.js"></script> -->
+	<script src = "CodeMirror/scroll/simplescrollbars.js"></script>
+	<!-- <script src = "CodeMirror/lint/lint.js"></script> -->
+	<!-- <script src = "CodeMirror/lint/javascript-lint.js"></script> -->
+	<!-- <script src = "CodeMirror/lint/coffeescript-lint.js"></script> -->
+	<script src = "macro-classes.js"></script>
+	<script src = "test.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="Layout1.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/lib/codemirror.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/fold/foldgutter.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/theme/material-darker.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/hint/show-hint.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/search/matchesonscrollbar.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/dialog/dialog.css">
+	<link rel="stylesheet" type="text/css" href="CodeMirror/scroll/simplescrollbars.css">
+
+</head>
+<body>
+	<template id="titlebar-template">
+		<div id="titlebar">
+			<div id="logobox" class="title-elem">
+				<div id="logo">
+					<span id="zsscriptlogo">ZS</span>
+				</div>
+				<div id="name">
+					<span id="zsscriptname">Zoho Script</span>
+				</div>
+			</div>
+			<div id="macronamebox" class="title-elem">
+				<input type="text" id="script-name" name="ScriptName" value="Untitled Script">
+			</div>
+			<div id="support-box" class="title-elem">
+				<div id="help" class="support-btns">Help</div>
+				<div id="more" class="support-btns">More</div>
+				<div id="acc" class="support-btns">Acc</div>
+			</div>
+		</div>
+	</template>
+	<template id="sidebar-template">
+		<div id="sidebar">
+			<ul id="sidebar-list">
+				<li class="sidebar-items">
+					<span class="sidebar-item-icon">O</span>
+					<span class="sidebar-item-name">Overview</span>
+				</li>
+				<li class="sidebar-items">
+					<span class="sidebar-item-icon">O</span>
+					<span class="sidebar-item-name">Editor</span>
+				</li>
+				<li class="sidebar-items">
+					<span class="sidebar-item-icon">O</span>
+					<span class="sidebar-item-name">Trigger</span>
+				</li>
+				<li class="sidebar-items">
+					<span class="sidebar-item-icon">O</span>
+					<span class="sidebar-item-name">Execution</span>
+				</li>
+				<li class="sidebar-items">
+					<span class="sidebar-item-icon">O</span>
+					<span class="sidebar-item-name">Settings</span>
+				</li>
+			</ul>
+		</div>
+	</template>
+	<template id="addon-list-template">
+		<div id="addon-bar">
+			<ul id="addon-list">
+				<li class="addon-list-item">
+					<span class="addon-list-item-name">Files</span>
+					<span class="plus-btn">+</span>
+					<!-- <div class="addon-list-subitem-list"> -->
+						<li class="addon-list-subitem">
+							<span class="addon-list-subitem-name">File1.zs</span>
+							<span class="addon-list-subitem-options">:</span>
+						</li>
+						<li class="addon-list-subitem">
+							<span class="addon-list-subitem-name">File2.zs</span>
+							<span class="addon-list-subitem-options">:</span>
+						</li>
+					<!-- </div> -->
+				</li>
+				<li class="addon-list-item">
+					<span class="addon-list-item-name">Libraries</span>
+					<span class="plus-btn">+</span>
+				</li>
+				<li class="addon-list-item">
+					<span class="addon-list-item-name">Services</span>
+					<span class="plus-btn">+</span>
+				</li>
+			</ul>
+		</div>
+	</template>
+	<template id="editor-menu-template">
+		<div id="editor-menu">
+			<ul id="editor-menu-list">
+				<li class="editor-menu-list-item">
+					<span class="editor-menu-list-item-name">Undo</span>
+				</li>
+				<li class="editor-menu-list-item">
+					<span class="editor-menu-list-item-name">Redo</span>
+				</li>
+				<li class="editor-menu-list-item">
+					<span class="editor-menu-list-item-name">Save</span>
+				</li>
+				<li class="editor-menu-list-item">
+					<span class="editor-menu-list-item-name">Run</span>
+				</li>
+				<li class="editor-menu-list-item">
+					<span class="editor-menu-list-item-name">Debug</span>
+				</li>
+				<li class="editor-menu-list-item right">
+					<span class="editor-menu-list-item-name">Undo</span>
+				</li>
+			</ul>
+		</div>
+	</template>
+	<template id="editor-template">
+		<div id="editorbox">
+			<textarea id="editorarea"></textarea>
+		</div>
+	</template>
+</body>
+<script type="text/javascript" src="Layout1.js"></script>
+</html>
