@@ -115,6 +115,7 @@ body{
 	overflow: hidden;
 	padding: 5px;
 	background-color: white;
+	/*z-index: 100;*/
 }
 #addon-list{
 	list-style-type: none;
@@ -128,22 +129,72 @@ body{
 	margin: 15px 5px 15px 5px;
 	line-height: 35px;
 }
+.item-group{
+	position: relative;
+	overflow: visible;
+	width: 100%;
+}
 .addon-list-item-name{
+	float: left;
+	width: 80%;
 	font-size: 20px;
+}
+.addon-list-subitem-list{
+	max-height: 150px;
+	overflow-y: visible;
+}
+.addon-list-subitem-list::-webkit-scrollbar {
+  width: 6px;
+}
+.addon-list-subitem-list::-webkit-scrollbar-thumb{
+	background-color: gray;
+	border-radius: 5px;
+}
+.addon-list-subitem-list{		/*support for firefox*/
+  scrollbar-width: thin;          /* "auto" or "thin" */
+  scrollbar-color: white gray;   /* scroll thumb and track */
 }
 .plus-btn{
 	float: right;
 	width: 25px;
 	height: 25px;
 	padding: 4px;
-	/*margin-bottom: 10px;*/
 	text-align: center;
 	line-height: 25px;
 	font-size: 20px;
 	font-weight: bolder;
 	background-color: black;
 	color: white;
-	/*margin-bottom: 10px;*/
+	cursor: pointer;
+}
+.options-active .options{
+	display: block;
+	z-index: 10;
+}
+.options{
+	position: absolute;
+	display: none;
+	top: 0;
+	right: 0;
+	width: 100px;
+	height: 70px;
+	color: white;
+	background-color: red;
+	border: 1px solid gray; 
+	/*z-index: 10000;*/
+	overflow-x: hidden;
+	overflow-y: scroll;
+	transform: translate(0%,50%);
+}
+.options span{
+	margin-bottom: 6px;
+	display: block;
+	border-bottom: 1px solid gray;
+	padding: 2px;
+	width: 100%;
+	height: 15px;
+	font-size: 15px;
+	line-height: 15px;
 }
 .addon-list-subitem{
 	background-color: gray;
@@ -156,52 +207,133 @@ body{
 }
 
 .addon-list-subitem-name{
-	font-size: 16px;
+	width: 90%
+	font-size: 18px;
 	color: white;
+	width: 85%;
+	height: 28px;
+	line-height: 28px;
+	background-color: blue;
+	float: left;
+}
+.filename{
+	width: 100%;
+	height: 100%;
+	font-size: 15px;
+	padding-left: 5px; 
+	border: none;
+	outline: none;
 }
 .addon-list-subitem-options{
 	float: right;
 	font-size: 25px;
 	font-weight: bolder;
-	width: 25px;
-	height: 25px;
-	line-height: 25px;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	background-color: lightblue;
+	float: right;
+	cursor: pointer;
+}
+.addon-list-subitem-options:hover{
+	background-color: white;
+	color: black;
+}
+.subitem-group{
+	position: relative;
+	overflow: visible;
+	width: 100%;
+	/*display: flex;*/
+	/*float: right;*/
+}
+.sub-options-active .sub-options{
+	display: block;
+	z-index: 10;
+}
+.sub-options{
+	position: absolute;
+	display: none;
+	top: 0;
+	right: 0;
+	width: 150px;
+	height: 100px;
+	color: white;
+	background-color: red;
+	border: 1px solid gray; 
+	/*z-index: 10;*/
+	overflow-x: hidden;
+	overflow-y: scroll;
+	transform: translate(0%,25%);
+}
+.sub-options span{
+	display: block;
+	border-bottom: 1px solid gray;
+	padding: 5px;
+	width: 100%;
+	height: 15px;
+	font-size: 15px;
+	line-height: 15px;
+	margin-bottom: 6px;
+	vertical-align: middle;
 }
 #editor-menu{
 	position: absolute;
 	top: 60px;
 	left: 310px;
-	height: 70px;
-	width: 100%;
+	height: 50px;
+	width: calc(100% - 320px);
 	background-color: lightblue;
 	padding: 5px;
 	/*display: flex;*/
 }
-.editor-menu-list{
+#editor-menu-list{
+	list-style-type: none;
 	padding-left: 0px;
-	margin: 0;
+	margin-top: 10px;
+	display: flex;
 	/*float: left;*/
 	/*display: flex;*/
 }
+#editor-menu-list li{
+	margin-right: 10px;
+}
 .editor-menu-list-item{
-	list-style-type: none;
-	width: 60px;
-	height: 20px;
-	padding: 3px;
-	margin-right: 10px;	
+	/*list-style-type: none;*/
+	width: 100%;
+	min-width: 60px;
+	height: 30px;
+	/*padding: 3px;*/
+	margin-right: 25px;	
 	font-size: 15px;
 	float: left;
-	/*display: flex;*/
+	line-height: 30px;
 	text-align: center;
-	background-color: white;
+	/*background-color: gray;*/
 }
-.editor-menu-list-item-name{
-	/*height: 20px;*/
+.menu-btn{
+	outline: none;
+	width: 100%;
+	height: 100%;
+	line-height: 20px;
+	border: none;
+	border-radius: 5px;
+	padding: 3px;
+	font-size: 15px;
+	background-color: white;
+	color: black;
+}
+.menu-btn:disabled{
+	background-color: gray;
+}
+#selectFunction{
+	width: 200px;
 }
 #editorbox{
-	width: 100%;
-	height: calc(80vh - 70px);
+	width: calc(100% - 310px);
+	height: calc(80vh - 50px);
 	position: absolute;
-	top: 140px; 
+	top: 120px; 
 	left: 310px;
+	/*z-index: 10;*/
 }

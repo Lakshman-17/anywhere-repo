@@ -23,6 +23,10 @@ if("content" in document.createElement("template")){
 	var template = document.getElementById("JSMACRO-EDITORBLOCK");
 	var clone = template.content.cloneNode(true);
 	editorbox.appendChild(clone);
+
+	var template = document.getElementById("test-template");
+	var clone = template.content.cloneNode(true);
+	document.body.appendChild(clone);	
 }
 
 var editor = CodeMirror.fromTextArea(document.getElementById("editorarea"), {

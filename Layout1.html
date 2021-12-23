@@ -85,27 +85,79 @@
 	<template id="addon-list-template">
 		<div id="addon-bar">
 			<ul id="addon-list">
+				<!-- <div class="addon-list-item-div"> -->
+					<li class="addon-list-item">
+						<div class="item-group">
+							<div class="addon-list-item-name">Files</div>
+							<div class="plus-btn">+</div>
+							<div class="options">
+								<span>HTML</span>
+								<span>Script</span>
+							</div>
+						</div>
+					</li>
+						<div class="addon-list-subitem-list">
+							<li class="addon-list-subitem">
+								<div class="subitem-group">
+									<div class="addon-list-subitem-name">
+										<input class="filename" type="text" value="File1.zs" readonly>
+									</div>
+									<div class="addon-list-subitem-options">:</div>
+									<div class="sub-options">
+										<span>Rename</span>
+										<span>Delete</span>
+										<span>Copy</span>
+										<span>Delete</span>
+										<span>Copy</span>
+									</div>
+								</div>
+							</li>
+							
+						<!-- </div> -->
+						<!-- </li> -->
+							<li class="addon-list-subitem">
+								<div class="subitem-group" id="item2">
+									<div class="addon-list-subitem-name">
+										<input class="filename" id="filerename" type="text" value="File2.zs" readonly="readonly">
+									</div>
+									<div class="addon-list-subitem-options">:</div>
+									<div class="sub-options">
+										<span id="renamebtn">Rename</span>
+										<span id="deletebtn">Delete</span>
+										<span id="copybtn">Copy</span>
+									</div>
+								</div>
+							</li>
+							<!-- <li class="addon-list-subitem">
+								<span class="addon-list-subitem-name">File1.zs</span>
+								<span class="addon-list-subitem-options">:</span>
+							</li>
+							<li class="addon-list-subitem">
+								<span class="addon-list-subitem-name">File2.zs</span>
+								<span class="addon-list-subitem-options">:</span>
+							</li> -->
+						</div>
+					<!-- </li> -->
+				<!-- </div> -->
 				<li class="addon-list-item">
-					<span class="addon-list-item-name">Files</span>
-					<span class="plus-btn">+</span>
-					<!-- <div class="addon-list-subitem-list"> -->
-						<li class="addon-list-subitem">
-							<span class="addon-list-subitem-name">File1.zs</span>
-							<span class="addon-list-subitem-options">:</span>
-						</li>
-						<li class="addon-list-subitem">
-							<span class="addon-list-subitem-name">File2.zs</span>
-							<span class="addon-list-subitem-options">:</span>
-						</li>
-					<!-- </div> -->
+					<div class="item-group">
+						<div class="addon-list-item-name">Libraries</div>
+						<div class="plus-btn">+</div>
+						<div class="options">
+							<span>Zip</span>
+							<span>Individual</span>
+						</div>
+					</div>
 				</li>
 				<li class="addon-list-item">
-					<span class="addon-list-item-name">Libraries</span>
-					<span class="plus-btn">+</span>
-				</li>
-				<li class="addon-list-item">
-					<span class="addon-list-item-name">Services</span>
-					<span class="plus-btn">+</span>
+					<div class="item-group">
+						<div class="addon-list-item-name">Services</div>
+						<div class="plus-btn">+</div>
+						<div class="options">
+							<span>Internal</span>
+							<span>External</span>
+						</div>
+					</div>
 				</li>
 			</ul>
 		</div>
@@ -113,23 +165,47 @@
 	<template id="editor-menu-template">
 		<div id="editor-menu">
 			<ul id="editor-menu-list">
-				<li class="editor-menu-list-item">
-					<span class="editor-menu-list-item-name">Undo</span>
+				<li>
+					<div class="editor-menu-list-item">
+						<button id="undobtn" class="menu-btn">undo</button>
+					</div>
 				</li>
-				<li class="editor-menu-list-item">
-					<span class="editor-menu-list-item-name">Redo</span>
+				<li>
+					<div class="editor-menu-list-item">
+						<button id="redobtn" class="menu-btn">redo</button>
+					</div>
 				</li>
-				<li class="editor-menu-list-item">
-					<span class="editor-menu-list-item-name">Save</span>
+				<li>
+					<div class="editor-menu-list-item">
+						<button id="savebtn" class="menu-btn">save</button>
+					</div>
 				</li>
-				<li class="editor-menu-list-item">
-					<span class="editor-menu-list-item-name">Run</span>
+				<li>
+					<div class="editor-menu-list-item">
+						<button id="runbtn" class="menu-btn" disabled="true">run</button>
+					</div>
 				</li>
-				<li class="editor-menu-list-item">
-					<span class="editor-menu-list-item-name">Debug</span>
+				<li>
+					<div class="editor-menu-list-item">
+						<button class="menu-btn" disabled="true">debug</button>
+					</div>
 				</li>
-				<li class="editor-menu-list-item right">
-					<span class="editor-menu-list-item-name">Undo</span>
+				<li>
+					<div id="functionlist" class="editor-menu-list-item">
+						<select id="selectFunction" class="menu-btn">
+							<option value = "null" selected>- no func yet -</option>
+						</select>
+					</div>
+				</li>
+				<li>
+					<div class="editor-menu-list-item">
+						<button class="menu-btn" disabled="true">execution log</button>
+					</div>
+				</li>
+				<li>
+					<div class="editor-menu-list-item">
+						<button class="menu-btn" disabled="true">switch to legacy</button>
+					</div>
 				</li>
 			</ul>
 		</div>
