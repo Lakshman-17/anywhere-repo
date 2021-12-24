@@ -493,13 +493,13 @@ function getType(curcurs, openpos, closepos, toklist){
 				}
 			// }
 			}
-			if(typeof(this.param_hint) != "undefined"){
-				if(this.param_hint.parentNode){
-					document.body.removeChild(this.param_hint);
+			if(typeof(param_hint) != "undefined"){
+				if(param_hint.parentNode){
+					document.body.removeChild(param_hint);
 				}
 			}
 			console.log("start of box creation");
-			param_hint = this.param_hint = document.createElement("P");
+			param_hint = param_hint = document.createElement("P");
 			param_hint.className = HINT_PARAM_CLASS;
 			param_hint.id = "parambox";
 			curpos = editor.cursorCoords(editor.getCursor());
@@ -528,7 +528,7 @@ function getType(curcurs, openpos, closepos, toklist){
 						if(c == np-1){
 							// STATUS_SHOW_CUR_PARAM.innerHTML = param[np-1];
 							parambox.innerHTML = param[np-1];
-							// this.param_hint.innerHTML = param[np-1];
+							// param_hint.innerHTML = param[np-1];
 							// console.log("within comma last");
 						}
 						else{
@@ -644,9 +644,9 @@ function checkInsideBrackets(){
 		// STATUS_SHOW_CUR_PARAM.innerHTML = "";
 		// parambox.innerHTML = "";
 	
-		if(typeof(this.param_hint) != "undefined"){
-			if(this.param_hint.parentNode){
-				document.body.removeChild(this.param_hint);
+		if(typeof(param_hint) != "undefined"){
+			if(param_hint.parentNode){
+				document.body.removeChild(param_hint);
 			}
 		}
 		return;
@@ -679,9 +679,9 @@ function checkInsideBrackets(){
 		// STATUS_SHOW_PARAM_COUNT.innerHTML = "";
 		// STATUS_SHOW_CUR_PARAM.innerHTML = "";
 		parambox.innerHTML = "";
-		if(typeof(this.param_hint) != "undefined"){
-			if(this.param_hint.parentNode){
-				document.body.removeChild(this.param_hint);
+		if(typeof(param_hint) != "undefined"){
+			if(param_hint.parentNode){
+				document.body.removeChild(param_hint);
 			}
 		}
 		return;
@@ -699,9 +699,9 @@ function checkInsideBrackets(){
 		// STATUS_SHOW_PARAM_COUNT.innerHTML = "";
 		// STATUS_SHOW_CUR_PARAM.innerHTML = "";
 		parambox.innerHTML = "";
-		if(typeof(this.param_hint) != "undefined"){
-			if(this.param_hint.parentNode){
-				document.body.removeChild(this.param_hint);
+		if(typeof(param_hint) != "undefined"){
+			if(param_hint.parentNode){
+				document.body.removeChild(param_hint);
 			}
 		}
 		return;

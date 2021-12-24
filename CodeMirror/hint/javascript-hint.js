@@ -268,10 +268,11 @@
                         if (toklist[itr].type == "keyword") {
                             skip = true;
                             stop = true;
+                            // notfound = false;
                             break;
                         }
 
-                        if (toklist[itr].string == "=") {
+                        if (toklist[itr].string == "=" || toklist[itr].string == ";" || toklist[itr].string == "}") {  // || toklist[itr].string == ";" || toklist[itr].string == "{" || toklist[itr].string == "}" || toklist[itr].string == "(" || toklist[itr].string == ")" 
                             equalisreached = 1;
                             stop = true;
                             notfound = false;
