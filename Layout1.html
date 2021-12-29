@@ -14,10 +14,10 @@
 	<script src = "CodeMirror/keymap/vim.js"></script>
 	<script src = "CodeMirror/hint/show-hint.js"></script>
 	<script src = "CodeMirror/hint/javascript-hint.js"></script>
-	<!-- <script src = "CodeMirror/search/jump-to-line.js"></script> -->
-	<!-- <script src = "CodeMirror/search/searchcursor.js"></script> -->
-	<!-- <script src = "CodeMirror/search/search.js"></script> -->
-	<!-- <script src = "CodeMirror/dialog/dialog.js"></script> -->
+	<script src = "CodeMirror/search/jump-to-line.js"></script>
+	<script src = "CodeMirror/search/searchcursor.js"></script>
+	<script src = "CodeMirror/search/search.js"></script>
+	<script src = "CodeMirror/dialog/dialog.js"></script>
 	<script src = "CodeMirror/scroll/simplescrollbars.js"></script>
 	<!-- <script src = "CodeMirror/lint/lint.js"></script> -->
 	<!-- <script src = "CodeMirror/lint/javascript-lint.js"></script> -->
@@ -91,54 +91,14 @@
 							<div class="addon-list-item-name">Files</div>
 							<div class="plus-btn">+</div>
 							<div class="options">
-								<span>HTML</span>
-								<span>Script</span>
+								<span class="newbtn" id="newHTML">HTML</span>
+								<span class="newbtn" id="newScript">Script</span>
 							</div>
 						</div>
 					</li>
-						<div class="addon-list-subitem-list">
-							<li class="addon-list-subitem">
-								<div class="subitem-group">
-									<div class="addon-list-subitem-name">
-										<input class="filename" type="text" value="File1.zs" readonly>
-									</div>
-									<div class="addon-list-subitem-options">:</div>
-									<div class="sub-options">
-										<span>Rename</span>
-										<span>Delete</span>
-										<span>Copy</span>
-										<span>Delete</span>
-										<span>Copy</span>
-									</div>
-								</div>
-							</li>
+						<div class="addon-list-subitem-list" id="fileslist">
 							
-						<!-- </div> -->
-						<!-- </li> -->
-							<li class="addon-list-subitem">
-								<div class="subitem-group" id="item2">
-									<div class="addon-list-subitem-name">
-										<input class="filename" id="filerename" type="text" value="File2.zs" readonly="readonly">
-									</div>
-									<div class="addon-list-subitem-options">:</div>
-									<div class="sub-options">
-										<span id="renamebtn">Rename</span>
-										<span id="deletebtn">Delete</span>
-										<span id="copybtn">Copy</span>
-									</div>
-								</div>
-							</li>
-							<!-- <li class="addon-list-subitem">
-								<span class="addon-list-subitem-name">File1.zs</span>
-								<span class="addon-list-subitem-options">:</span>
-							</li>
-							<li class="addon-list-subitem">
-								<span class="addon-list-subitem-name">File2.zs</span>
-								<span class="addon-list-subitem-options">:</span>
-							</li> -->
 						</div>
-					<!-- </li> -->
-				<!-- </div> -->
 				<li class="addon-list-item">
 					<div class="item-group">
 						<div class="addon-list-item-name">Libraries</div>
@@ -162,6 +122,23 @@
 			</ul>
 		</div>
 	</template>
+	
+	<template id="filename-template">
+		<li class="addon-list-subitem">
+			<div class="subitem-group" id="item2">
+				<div class="addon-list-subitem-name">
+					<input class="filename" id="filerename" type="text" value="File2.zs" readonly="readonly" >
+				</div>
+				<div class="addon-list-subitem-options">:</div>
+				<div class="sub-options">
+					<span class="sub-options-btn btnRename" id="renamebtn">Rename</span>
+					<span class="sub-options-btn btnDelete" id="deletebtn">Delete</span>
+					<span class="sub-options-btn" id="copybtn">Copy</span>
+				</div>
+			</div>
+		</li>
+	</template>
+
 	<template id="editor-menu-template">
 		<div id="editor-menu">
 			<ul id="editor-menu-list">
@@ -173,6 +150,16 @@
 				<li>
 					<div class="editor-menu-list-item">
 						<button id="redobtn" class="menu-btn">redo</button>
+					</div>
+				</li>
+				<li>
+					<div class="editor-menu-list-item">
+						<button id="findreplacebtn" class="menu-btn">find & replace</button>
+					</div>
+				</li>
+				<li>
+					<div class="editor-menu-list-item">
+						<button id="insertfuncbtn" class="menu-btn">insert function</button>
 					</div>
 				</li>
 				<li>
@@ -213,6 +200,18 @@
 	<template id="editor-template">
 		<div id="editorbox">
 			<textarea id="editorarea"></textarea>
+		</div>
+	</template>
+	<template id="insertfunction-template">
+		<div id="InsertFunctionPopup" class="popup">
+			<!-- <div> -->
+				<!-- <form action="#"> -->
+					<label class="popup-ip-lbl" for="funcname">Your Function Name : </label><br>
+					<input class="popup-input" type="text" id="funcnameInput" name="funcname" placeholder="your fn name here ..."><br>
+					<input type="submit" class="popup-btn" id="funcNameSubmitBtn" value="OK"></button>
+				<!-- </form> -->
+				<button class="popup-btn" id="popup-close-btn">CLose</button><br>
+			<!-- </div> -->
 		</div>
 	</template>
 </body>

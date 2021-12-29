@@ -20,6 +20,17 @@ if("content" in document.createElement("template")){
 	var editorTemplate = document.getElementById("editor-template");
 	var clone = editorTemplate.content.cloneNode(true);
 	document.body.appendChild(clone);
+
+	var insFuncTemplate = document.getElementById("insertfunction-template");
+	var clone = insFuncTemplate.content.cloneNode(true);
+	document.body.appendChild(clone);
+
+	var i = 2;
+	while(i--){
+		var filenameTemplate = document.getElementById("filename-template");
+		var clone = filenameTemplate.content.cloneNode(true);
+		document.getElementById("fileslist").appendChild(clone);
+	}
 }
 
 var editor = CodeMirror.fromTextArea(document.getElementById("editorarea"), {
@@ -50,10 +61,13 @@ function toggleOptions(ev){
 	parent.parentNode.classList.toggle("options-active");
 }
 
-var subOptBtn = document.getElementsByClassName("addon-list-subitem-options");
-for(var iter = 0; iter < subOptBtn.length; iter++){
-	subOptBtn[iter].addEventListener("click",toggleSubOptions);
+function addOptionsEvent(){
+	var subOptBtn = document.getElementsByClassName("addon-list-subitem-options");
+	for(var iter = 0; iter < subOptBtn.length; iter++){
+		subOptBtn[iter].addEventListener("click",toggleSubOptions);
+	}
 }
+addOptionsEvent();
 
 function toggleSubOptions(ev){
 	var parent = ev.target.parentNode;
@@ -70,16 +84,105 @@ function closeSubOptions(ev){
 	parent.parentNode.classList.remove("sub-options-active");
 }
 
-var renamebtn = document.getElementById("renamebtn");
-renamebtn.addEventListener("click",activeRename);
+var insFuncPopupBtn = document.getElementById("insertfuncbtn");
+insFuncPopupBtn.addEventListener("click",openFuncPopup);
 
-function activeRename(){
-	var field = document.getElementById("filerename");
-	field.readonly = false;
+function openFuncPopup(){
+	document.getElementById("InsertFunctionPopup").style.display = "block";
+	document.getElementById("funcnameInput").focus();
+}
+
+var closeFuncPopupBtn = document.getElementById("popup-close-btn");
+closeFuncPopupBtn.addEventListener("click",closeFuncPopup);
+
+function closeFuncPopup(){
+	document.getElementById("InsertFunctionPopup").style.display = "none";
+}
+
+var funcNameSubmitBtn = document.getElementById("funcNameSubmitBtn");
+funcNameSubmitBtn.addEventListener("click",doInsertFunction);
+
+function getFilesList(){
+	var list = ['file1.zs','file2.zs'];
+	var i = list.length;
+	while(i--){
+		var filenameTemplate = document.getElementById("filename-template");
+		var clone = filenameTemplate.content.cloneNode(true);
+		// clone.firstElementChild.firstElementChild.firstElementChild.value = list[i];
+		document.getElementById("fileslist").appendChild(clone);
+		// document.getElementById("fileslist").lastElementChild.firstElementChild.firstElementChild.firstElementChild.value = list[i];
+	}
+} 
+
+function enterEvent(){
+	var flist = document.getElementsByClassName("filename");
+	for(var iter = 0; iter < flist.length; iter++){
+		flist[iter].addEventListener('keypress', (event) => {
+		  const keyName = event.key;
+		  if (keyName === 'Enter') {
+		    event.target.setAttribute("readonly",true)
+		  }
+		}, false);
+	}
+}
+enterEvent();
+
+function addRenameEvent(){
+	var renameBtn = document.getElementsByClassName("btnRename");
+	for(var iter = 0; iter < renameBtn.length; iter++){
+		renameBtn[iter].addEventListener("click",activeRename);
+	}
+}
+addRenameEvent();
+
+function activeRename(ev){
+	var ip = ev.target.parentNode.parentNode;
+	var field = ip.firstElementChild.firstElementChild;
+	field.removeAttribute("readonly");
 	field.focus();
   	field.select();
-	console.log(field.readonly)
 }
+
+function addDeleteEvent(){
+	var delBtn = document.getElementsByClassName("btnDelete");
+	for(var iter = 0; iter < delBtn.length; iter++){
+		delBtn[iter].addEventListener("click",deleteFile);
+	}	
+}
+addDeleteEvent();
+
+function deleteFile(ev){
+	var file = ev.target.parentNode.parentNode.parentNode;
+	file.remove();
+}
+
+
+document.getElementById("newHTML").addEventListener("click",addNewHtmlFile);
+
+function addNewHtmlFile(){
+	var filenameTemplate = document.getElementById("filename-template");
+	var clone = filenameTemplate.content.cloneNode(true);
+	clone.getElementById("filerename").value = "untitled.html";
+	document.getElementById("fileslist").appendChild(clone);
+	addOptionsEvent();
+	addRenameEvent();
+	enterEvent();
+	addDeleteEvent();
+}
+
+document.getElementById("newScript").addEventListener("click",addNewScriptFile);
+
+function addNewScriptFile(){
+	var filenameTemplate = document.getElementById("filename-template");
+	var clone = filenameTemplate.content.cloneNode(true);
+	clone.getElementById("filerename").value = "untitled.zs";
+	document.getElementById("fileslist").appendChild(clone);
+	addOptionsEvent();
+	addRenameEvent();
+	enterEvent();
+	addDeleteEvent();
+}
+
 
 
 // Note: Hint: editor menubar functionalities 
@@ -88,8 +191,11 @@ var doc = editor.getDoc();
 var func_count = 0;
 var func_list = [];
 
-document.getElementById("undobtn").addEventListener("click",doundo);
-document.getElementById("redobtn").addEventListener("click",doredo);
+document.getElementById("undobtn").addEventListener("click",doUndo);
+document.getElementById("redobtn").addEventListener("click",doRedo);
+document.getElementById("findreplacebtn").addEventListener("click",doFindAndReplace);
+// document.getElementById("insertfuncbtn").addEventListener("click",doInsertFunction);
+
 document.getElementById("redobtn").disabled = true;
 document.getElementById("undobtn").disabled = true;
 document.getElementById("savebtn").disabled = true;
@@ -117,12 +223,30 @@ function updateSaveButton(){
 }
 editor.on("change",updateSaveButton);
 
-function doundo(){
+function doUndo(){
 	editor.execCommand("undo");
 }
 
-function doredo(){
+function doRedo(){
 	editor.execCommand("redo");
+}
+
+function doFindAndReplace(){
+	editor.execCommand("replace");
+}
+
+function doInsertFunction(){
+	var fnname = document.getElementById("funcnameInput");
+	if(fnname.value != ""){
+		doc.setValue(doc.getValue() + "function "+ fnname.value + "()\n{\n}\n");
+		closeFuncPopup();
+		fnname.value = "";
+		editor.setCursor(doc.lineCount())
+		editor.focus();
+	}
+	else{
+		window.alert("pls enter a func name");
+	}
 }
 
 function countFunctions(){
@@ -297,7 +421,7 @@ function getV(){
 									var start = 0;
 									var semicolonfound = 0;
 									while(stop != true && curline < totallines && notfound == true && semicolonfound == 0){
-										var toklist = editor.getLineTokens(curline);			console.log("curline : " + curline);
+										var toklist = editor.getLineTokens(curline);			//console.log("curline : " + curline);
 										for( ; itr < tokcount ; itr++){
 											if(curline == iter){
 												if(toklist[itr].type == "variable" && start == 0){
@@ -306,7 +430,7 @@ function getV(){
 												}
 											}
 											if(start == 1){
-												if(typeof(toklist[itr]) != "undefined") {		console.log(toklist[itr].string);
+												if(typeof(toklist[itr]) != "undefined") {		//console.log(toklist[itr].string);
 													if(toklist[itr].type == "keyword" || toklist[itr].string == "="){
 														stop = true;
 														continue;
@@ -314,8 +438,8 @@ function getV(){
 													if(toklist[itr].string.trim() == ""){
 														continue;
 													}
-													linlist.insertAtEnd(toklist[itr].string);	console.log("inserted : " + toklist[itr].string);
-													if(toklist[itr].string ==";"){		console.log("found ;");
+													linlist.insertAtEnd(toklist[itr].string);	//console.log("inserted : " + toklist[itr].string);
+													if(toklist[itr].string ==";"){		//console.log("found ;");
 														semicolonfound = 1;
 														stop = true;
 														notfound = false;
@@ -324,9 +448,9 @@ function getV(){
 												}
 											}
 										}	// end of for
-										if(stop == false){	console.log("stop is false after for loop with curline = " + curline);
+										if(stop == false){	//console.log("stop is false after for loop with curline = " + curline);
 											if(curline+1 <= totallines){
-												curline++;	console.log("go to next line : " + curline);
+												curline++;	//console.log("go to next line : " + curline);
 												itr = 0;
 											}
 											else{
@@ -410,6 +534,7 @@ editor.on("inputRead",checkAutoComplete);
 
 function getType(curcurs, openpos, closepos, toklist){
 	console.log("openpos : " + openpos + " , closepos : " + closepos + " ,  toklist : " + toklist);
+	var tokenlist = toklist;
 	var stop = false;
 	var curline = curcurs.line;
 	var linlist = new LinkedList();
@@ -423,6 +548,7 @@ function getType(curcurs, openpos, closepos, toklist){
 	// console.log("curcurs : " + curcurs);
 	// console.log("toklist count: " + tokcount);
 	// console.log("openpos : " + openpos);
+			// not finding the rvalue properly when func is in next lines
 	while(stop == false && notfound == true){
 		for( ; itr >= 0 && stop == false ; itr--){
 			if(typeof(toklist[itr]) == "undefined"){
@@ -482,17 +608,20 @@ function getType(curcurs, openpos, closepos, toklist){
 		// STATUS_SHOW_PARAM.innerHTML = param;
 		// STATUS_SHOW_PARAM_COUNT.innerHTML = np;
 		// STATUS_SHOW_CUR_PARAM.innerHTML = "";
+		console.log("params are : " + param);
 		if(np > 0){
 			for(var it = openpos; it < closepos; it++){
 				// if(typeof(toklist[it]) != "undefined"){
-				if(toklist[it].string == ","){
-					comma_pos.push(toklist[it].start);
+					// console.log("tokenlist printed " + tokenlist[it].string)
+				if(tokenlist[it].string == ","){
+					comma_pos.push(tokenlist[it].start);
 					if(comma_pos.length == np-1){
 						break;
 					}
 				}
 			// }
 			}
+			console.log("comma pos printed " + comma_pos)
 			if(typeof(param_hint) != "undefined"){
 				if(param_hint.parentNode){
 					document.body.removeChild(param_hint);
@@ -507,7 +636,7 @@ function getType(curcurs, openpos, closepos, toklist){
 			param_hint.style.top = (curpos.top - 60) + "px";
 			document.body.appendChild(param_hint);
 			parambox = document.getElementById("parambox");
-			console.log("after append box + comma leng " + comma_pos.length);
+			//console.log("after append box + comma leng " + comma_pos.length);
 			if(comma_pos.length == 0){
 				// STATUS_SHOW_CUR_PARAM.innerHTML = param[0];
 				// param_hint.innerHTML = param[0];
@@ -602,23 +731,25 @@ var closeBrackFound = false;
 var comma_pos = [];
 
 function checkFunctionOpen(){			//console.log("in checkFunctionOpen");
-	var cur = editor.getCursor();
-	var curToken = editor.getTokenAt(cur);	//console.log(curToken.string);
-	if(curToken.string == "("){			//console.log("yes fun open ");
-		funOpen = true;
-		limitStart = cur.ch;
-		limitLine = cur.line;
-		var tokens = editor.getLineTokens(cur.line);
-		// var t;
-		for(var iter = 0 ; iter < tokens.length; iter++){
-			if(tokens[iter].end == cur.ch){
-				// t = iter;
-				openbrackTokenPos = iter;
-				openbrackCh = tokens[iter].end;
-				break;
+	if(paramDispOn == false){
+		var cur = editor.getCursor();
+		var curToken = editor.getTokenAt(cur);	//console.log(curToken.string);
+		if(curToken.string == "("){			//console.log("yes fun open ");
+			funOpen = true;
+			limitStart = cur.ch;
+			limitLine = cur.line;	
+			var tokens = editor.getLineTokens(cur.line);
+			// var t;
+			for(var iter = 0 ; iter < tokens.length; iter++){
+				if(tokens[iter].end == cur.ch){
+					// t = iter;
+					openbrackTokenPos = iter;
+					openbrackCh = tokens[iter].end;
+					break;
+				}
 			}
+			// checkInsideBrackets(cur);
 		}
-		// checkInsideBrackets(cur);
 	}
 }
 editor.on("cursorActivity",checkFunctionOpen);

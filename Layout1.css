@@ -141,7 +141,7 @@ body{
 }
 .addon-list-subitem-list{
 	max-height: 150px;
-	overflow-y: visible;
+	overflow-y: scroll;
 }
 .addon-list-subitem-list::-webkit-scrollbar {
   width: 6px;
@@ -153,6 +153,10 @@ body{
 .addon-list-subitem-list{		/*support for firefox*/
   scrollbar-width: thin;          /* "auto" or "thin" */
   scrollbar-color: white gray;   /* scroll thumb and track */
+}
+.newbtn:hover{
+	background-color: white;
+	color: black;
 }
 .plus-btn{
 	float: right;
@@ -185,6 +189,7 @@ body{
 	overflow-x: hidden;
 	overflow-y: scroll;
 	transform: translate(0%,50%);
+	/*z-index: 100;*/
 }
 .options span{
 	margin-bottom: 6px;
@@ -223,6 +228,10 @@ body{
 	padding-left: 5px; 
 	border: none;
 	outline: none;
+}
+.sub-options-btn:hover{
+	background: white;
+	color: black;
 }
 .addon-list-subitem-options{
 	float: right;
@@ -336,4 +345,27 @@ body{
 	top: 120px; 
 	left: 310px;
 	/*z-index: 10;*/
+}
+.popup{
+	position: fixed;
+	top: 30%;
+	left: 40%;
+	z-index: 100;
+}
+#InsertFunctionPopup{
+	width: 300px;
+	height: 300px;
+	background: aquamarine;
+	box-shadow: 2px 5px gray;
+	padding: 10px;
+	display: none;
+}
+.popup-input{
+	width: 80%;
+	height: 30px;
+	margin-left: 20px;
+	padding: 3px;
+}
+.popup-ip-lbl{
+	font-weight: bold;
 }
